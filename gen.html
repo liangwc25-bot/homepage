@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="生图">
+<meta name="theme-color" content="#0f0f14">
+<link rel="manifest" href="/gen-manifest.json">
+<title>生图 · Runware</title>
+<style>
+  :root {
+    --bg: #0f0f14;
+    --card: #1a1a24;
+    --accent: #7c5cfc;
+    --green: #34c759;
+    --red: #ff3b30;
+    --text: #e2e8f0;
+    --text2: #8e8e93;
+    --orange: #ff9500;
+    --pink: #ff2d55;
+    --radius: 16px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', system-ui, sans-serif;
+    background: radial-gradient(ellipse at 50% 0%, #1a1a30 0%, var(--bg) 70%);
+    background-attachment: fixed;
+    color: var(--text);
+    min-height: 100vh; padding: 32px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 1000px; margin: 0 auto; }
+  h1 {
+    font-size: 2rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 6px;
+    background: linear-gradient(135deg, var(--orange), var(--accent));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .subtitle { color: var(--text2); font-size: 0.9rem; margin-bottom: 28px; }
+  .layout { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 700px) { .layout { grid-template-columns: 1fr; } }
+  .panel {
+    background: var(--card); border: 1px solid rgba(255,255,255,0.04);
+    border-radius: var(--radius); padding: 20px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  }
+  .panel h2 { font-size: 0.85rem; font-weight: 600; color: var(--text2); margin-bottom: 18px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .platform-tabs { display: flex; gap: 0; margin-bottom: 22px; background: rgba(255,255,255,0.04); border-radius: var(--radius); overflow: hidden; padding: 2px; }
+  .platform-tab {
+    flex: 1; padding: 8px 8px; border: none;
+    background: transparent; color: var(--text2);
+    font-size: 0.8rem; font-weight: 500; cursor: pointer; transition: all .25s ease; text-align: center; border-radius: calc(var(--radius) - 3px);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .platform-tab.active { background: var(--accent); color: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+  .platform-tab:hover:not(.active) { color: var(--text); }
+  .form-group { margin-bottom: 14px; }
+  .form-group label { display: block; font-size: 0.78rem; font-weight: 600; color: var(--text2); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.03em; }
+  textarea, select, input[type="text"], input[type="number"] {
+    width: 100%; background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.08);
+    border-radius: 10px; color: var(--text); padding: 11px 14px;
+    font-size: 0.9rem; font-family: inherit; transition: all .2s ease; outline: none;
+  }
+  textarea:focus, select:focus, input:focus { border-color: var(--accent); background: rgba(124,92,252,0.06); box-shadow: 0 0 0 3px rgba(124,92,252,0.15); }
+  textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
+  select { cursor: pointer; -webkit-appearance: none; -moz-appearance: none; appearance: none; background-color: rgba(255,255,255,0.05); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238e8e93' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
+  .row { display: flex; gap: 14px; align-items: flex-end; }
+  .row .form-group { flex: 1; margin-bottom: 0; }
+  .toggle { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.85rem; color: var(--text2); }
+  .toggle input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--accent); cursor: pointer; }
+  .toggle input[type="checkbox"]:disabled { accent-color: var(--pink); cursor: not-allowed; opacity: 0.7; }
+  .hint { font-size: 0.75rem; color: var(--text2); margin-top: 4px; }
+  .hint.nsfw { color: var(--pink); }
+  .btn {
+    width: 100%; padding: 14px; border: none; border-radius: 12px;
+    font-size: 1rem; font-weight: 600; cursor: pointer; transition: all .2s ease;
+    background: var(--accent); color: white; letter-spacing: 0.01em;
+  }
+  .btn:hover { filter: brightness(1.1); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(124,92,252,0.3); }
+  .btn:active { transform: translateY(0) scale(0.98); }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; filter: none; box-shadow: none; }
+    width: 100%; padding: 12px; border: none; border-radius: 8px;
+    font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.2s;
+    background: var(--accent); color: white;
+  }
+  .btn:hover { filter: brightness(1.15); transform: translateY(-1px); }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; filter: none; }
+  .result-panel { display: flex; flex-direction: column; gap: 16px; }
+  .result-placeholder {
+    flex: 1; display: flex; align-items: center; justify-content: center;
+    border: 2px dashed rgba(255,255,255,0.06); border-radius: var(--radius);
+    color: var(--text2); font-size: 0.85rem; min-height: 320px; text-align: center; padding: 24px;
+    transition: border-color .3s ease;
+  }
+  .result-placeholder {
+    flex: 1; display: flex; align-items: center; justify-content: center;
+    border: 2px dashed rgba(255,255,255,0.08); border-radius: var(--radius);
+    color: var(--text2); font-size: 0.85rem; min-height: 300px; text-align: center; padding: 20px;
+  }
+  .result-placeholder img, .result-placeholder video { max-width: 100%; max-height: 500px; border-radius: 8px; }
+  .result-info { font-size: 0.8rem; color: var(--text2); font-weight: 500; }
+  .result-actions { display: flex; gap: 8px; }
+  .result-actions .btn { font-size: 0.85rem; padding: 8px 16px; flex: 1; }
+  .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .result-grid img { width: 100%; border-radius: 10px; }
+  .result-grid .result-card { text-align: center; }
+  .result-grid .result-card .card-label { font-size: 0.75rem; color: var(--text2); margin-top: 4px; }
+  .btn-secondary { background: rgba(255,255,255,0.06); color: var(--text); }
+  .btn-secondary:hover { background: rgba(255,255,255,0.12); }
+  .btn-secondary:hover { background: rgba(255,255,255,0.14); }
+  .error-msg { color: var(--red); font-size: 0.85rem; font-weight: 500; margin-top: 8px; padding: 10px 14px; background: rgba(255,59,48,0.08); border-radius: 10px; display: none; }
+  .status-bar { font-size: 0.82rem; font-weight: 500; color: var(--text2); margin-top: 10px; text-align: center; }
+  .status-bar .loading { color: var(--accent); }
+  .status-bar .done { color: var(--green); }
+  .back-link { display: inline-flex; align-items: center; gap: 4px; margin-bottom: 20px; color: var(--text2); text-decoration: none; font-size: 0.85rem; font-weight: 500; transition: color .2s; }
+  .back-link:hover { color: var(--accent); }
+
+  /* ── LoRA dynamic rows ── */
+  .lora-row { display: flex; gap: 6px; align-items: center; margin-bottom: 8px; position: relative; }
+  .lora-picker-wrap { flex: 1; position: relative; }
+  .lora-search {
+    width: 100%; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px; color: var(--text); padding: 8px 10px; font-size: 0.85rem;
+  }
+  .lora-search:focus { outline: none; border-color: var(--accent); }
+  .lora-search.has-value { color: var(--accent); font-weight: 500; }
+  .lora-value { display: none; }
+  .lora-dropdown {
+    display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 100;
+    background: var(--card); border: 1px solid rgba(255,255,255,0.12); border-radius: 8px;
+    max-height: 240px; overflow-y: auto; margin-top: 4px; box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  }
+  .lora-dropdown.open { display: block; }
+  .lora-dropdown .lora-opt {
+    padding: 8px 12px; cursor: pointer; font-size: 0.82rem; color: var(--text2);
+    border-bottom: 1px solid rgba(255,255,255,0.04); transition: .15s;
+  }
+  .lora-dropdown .lora-opt:hover { background: rgba(124,92,252,0.12); color: var(--text); }
+  .lora-dropdown .lora-opt.selected { color: var(--accent); font-weight: 600; }
+  .lora-dropdown .lora-opt.custom { color: var(--orange); font-style: italic; }
+  .lora-dropdown .lora-opt.none { color: var(--text2); opacity: 0.6; }
+  .lora-dropdown .lora-no-results { padding: 10px 12px; font-size: 0.8rem; color: var(--text2); text-align: center; }
+  input.lora-scale { width: 48px; min-width: 48px; max-width: 48px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: var(--text); padding: 8px 0; font-size: 0.8rem; text-align: center; -moz-appearance: textfield; box-sizing: border-box; }
+  input.lora-scale::-webkit-outer-spin-button,
+  input.lora-scale::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  input.lora-scale:focus { outline: none; border-color: var(--accent); }
+  .lora-remove { width: 28px; height: 28px; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; background: rgba(255,255,255,0.04); color: var(--text2); font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: .2s; }
+  .lora-remove:hover { border-color: var(--red); color: var(--red); }
+  .lora-add { display: inline-block; margin-top: 4px; padding: 6px 14px; border: 1px dashed rgba(255,255,255,0.15); border-radius: 8px; background: transparent; color: var(--text2); font-size: 0.8rem; cursor: pointer; transition: .2s; }
+  .lora-add:hover { border-color: var(--accent); color: var(--accent); }
+  .lora-label-row { font-size: 0.8rem; color: var(--text2); margin-bottom: 6px; display: flex; justify-content: space-between; }
+  .lora-label-row span:last-child { font-size: 0.75rem; }
+/* ── Custom select replacement ── */
+  .custom-select { position: relative; }
+  .custom-select-btn {
+    width: 100%; display: flex; align-items: center; justify-content: space-between;
+    background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.08);
+    border-radius: 10px; color: var(--text); padding: 11px 14px;
+    font-size: 0.9rem; font-family: inherit; cursor: pointer; transition: all .2s ease;
+  }
+  .custom-select-btn:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(124,92,252,0.15); }
+  .custom-select-btn .arrow { color: var(--text2); font-size: 0.7rem; transition: transform .2s; }
+  .custom-select.open .custom-select-btn .arrow { transform: rotate(180deg); }
+  .custom-select-dropdown {
+    display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 100;
+    background: var(--card); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px;
+    max-height: 220px; overflow-y: auto; margin-top: 4px; box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  }
+  .custom-select.open .custom-select-dropdown { display: block; }
+  .custom-select-dropdown .custom-opt {
+    padding: 10px 14px; cursor: pointer; font-size: 0.85rem; color: var(--text2);
+    border-bottom: 1px solid rgba(255,255,255,0.04); transition: .15s;
+  }
+  .custom-select-dropdown .custom-opt:hover { background: rgba(124,92,252,0.1); color: var(--text); }
+  .custom-select-dropdown .custom-opt.active { color: var(--accent); font-weight: 600; background: rgba(124,92,252,0.06); }
+  [data-theme="light"] .custom-select-btn { background: rgba(0,0,0,0.02); border-color: rgba(0,0,0,0.08); }
+  [data-theme="light"] .custom-select-btn:focus { background: rgba(108,76,224,0.04); border-color: var(--accent); box-shadow: 0 0 0 3px rgba(108,76,224,0.12); }
+  [data-theme="light"] .custom-select-dropdown { border-color: rgba(0,0,0,0.1); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+  [data-theme="light"] .custom-select-dropdown .custom-opt { border-bottom-color: rgba(0,0,0,0.06); }
+
+  [data-theme="light"] { --bg:#f8f9fc; --card:#fff; --accent:#6c4ce0; --green:#16a34a; --red:#dc2626; --text:#1e293b; --text2:#86868b; --orange:#ea580c; --pink:#e11d48; }
+  [data-theme="light"] body { background: radial-gradient(ellipse at 50% 0%, #e8ecf4 0%, #f8f9fc 70%); background-attachment: fixed; }
+  [data-theme="light"] .panel, [data-theme="light"] .result-placeholder { border-color: rgba(0,0,0,0.08) !important; }
+  [data-theme="light"] .btn-secondary { background: rgba(0,0,0,0.06); }
+  [data-theme="light"] .btn-secondary:hover { background: rgba(0,0,0,0.1); }
+  [data-theme="light"] textarea, [data-theme="light"] select, [data-theme="light"] input[type="text"], [data-theme="light"] input[type="number"] { background: rgba(0,0,0,0.02) !important; border-color: rgba(0,0,0,0.08) !important; }
+  [data-theme="light"] textarea:focus, [data-theme="light"] select:focus, [data-theme="light"] input:focus { background: rgba(108,76,224,0.04) !important; box-shadow: 0 0 0 3px rgba(108,76,224,0.12) !important; }
+  [data-theme="light"] select { -webkit-appearance: none !important; appearance: none !important; background-color: rgba(0,0,0,0.02) !important; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2386868b' d='M6 8L1 3h10z'/%3E%3C/svg%3E") !important; background-repeat: no-repeat !important; background-position: right 12px center !important; }
+  [data-theme="light"] .lora-dropdown { border-color: rgba(0,0,0,0.12); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+  [data-theme="light"] .lora-dropdown .lora-opt { border-bottom-color: rgba(0,0,0,0.06); }
+  [data-theme="light"] .panel { box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+  [data-theme="light"] .platform-tabs { background: rgba(0,0,0,0.04); }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>🎨 生图</h1>
+  <div class="subtitle">AI 图片生成</div>
+
+  <div class="platform-tabs">
+    <div class="platform-tab active" id="tab-runware" onclick="setPlatform('runware')">🟣 Runware</div>
+    <div class="platform-tab" id="tab-modelslab" onclick="setPlatform('modelslab')">🧪 ModelsLab</div>
+  </div>
+
+  <div class="layout">
+    <div class="panel">
+      <h2>参数</h2>
+
+      <div class="form-group">
+        <label>模型</label>
+        <div class="custom-select" id="model-wrap">
+          <button type="button" class="custom-select-btn" onclick="toggleCustomSelect(this.parentElement)">
+            <span class="custom-select-label"></span><span class="arrow">▾</span>
+          </button>
+          <div class="custom-select-dropdown"></div>
+        </div>
+        <input type="hidden" id="model" value="flux-dev">
+      </div>
+
+      <div class="form-group">
+        <label for="prompt">Prompt</label>
+        <textarea id="prompt" placeholder="输入 prompt…"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="negative">Negative Prompt（可选）</label>
+        <textarea id="negative" placeholder="不想出现的内容…" style="min-height:50px"></textarea>
+      </div>
+
+      <!-- Runware: LoRA dynamic rows -->
+      <div class="form-group" id="lora-group-runware">
+        <div class="lora-label-row"><span>自定义 LoRA（可叠加）</span><span id="lora-count">0 个</span></div>
+        <div id="lora-rows"></div>
+        <button class="lora-add" id="lora-add-btn" onclick="addLoraRow()">+ 添加 LoRA</button>
+      </div>
+
+      <!-- Runware: NSFW for Pony/Illu -->
+      <div class="form-group" id="nsfw-pony-group" style="display:none">
+        <label class="toggle">
+          <input type="checkbox" id="nsfw_pony" checked> 🔞 NSFW 默认开启
+        </label>
+        <div class="hint nsfw">开启自动注入 rating_explicit</div>
+      </div>
+
+      <!-- Qwen-Edit source image -->
+      <div class="form-group" id="qwen-image-group" style="display:none">
+        <label>🖼️ 要编辑的图片</label>
+        <input type="file" id="qwen_image_input" accept="image/*" style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:var(--text);padding:8px;font-size:0.85rem;cursor:pointer;color-scheme:dark">
+        <div class="hint">Qwen-Edit 是图片编辑模型，必须上传原图 · 按 prompt 修改图片内容</div>
+      </div>
+
+      <!-- ModelsLab info -->
+      <div class="form-group" id="modelslab-info" style="display:none">
+        <div class="hint nsfw">🧪 Pony/Illustrious 在 prompt 中加 rating_explicit 解锁 NSFW · SAFETY_CHECKER 已关 · ~$0.0047/张</div>
+        <div class="hint" style="margin-top:4px">💡 FLUX/SDXL 裸跑有底座 alignment，Pony/Illu 原生 NSFW</div>
+      </div>
+
+      <!-- ModelsLab LoRA input -->
+      <div class="form-group" id="lora-group-modelslab" style="display:none">
+        <label for="lora_modelslab">LoRA · model_id</label>
+        <input type="text" id="lora_modelslab" placeholder="gothic-velvet-lora-illustrious-pony-xl-xl">
+        <div class="hint">ModelsLab LoRA model_id · 社区预加载直接用</div>
+      </div>
+
+      <!-- Seed + CFG -->
+      <div class="row" id="seed-group">
+        <div class="form-group">
+          <label for="seed">Seed（留空随机）</label>
+          <input type="number" id="seed" placeholder="留空随机" min="0" max="2147483647">
+        </div>
+        <div class="form-group" id="cfg-group">
+          <label for="cfg">CFG Scale</label>
+          <input type="number" id="cfg" placeholder="自动" min="0.5" max="20" step="0.5">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>生成张数</label>
+        <div class="custom-select" id="count-wrap">
+          <button type="button" class="custom-select-btn" onclick="toggleCustomSelect(this.parentElement)">
+            <span class="custom-select-label">1 张</span><span class="arrow">▾</span>
+          </button>
+          <div class="custom-select-dropdown">
+            <div class="custom-opt" data-value="1">1 张</div>
+            <div class="custom-opt" data-value="2">2 张</div>
+            <div class="custom-opt" data-value="3">3 张</div>
+            <div class="custom-opt" data-value="4">4 张</div>
+            <div class="custom-opt" data-value="5">5 张</div>
+            <div class="custom-opt" data-value="6">6 张</div>
+            <div class="custom-opt" data-value="7">7 张</div>
+            <div class="custom-opt" data-value="8">8 张</div>
+            <div class="custom-opt" data-value="9">9 张</div>
+            <div class="custom-opt" data-value="10">10 张</div>
+          </div>
+        </div>
+        <input type="hidden" id="count" value="1">
+      </div>
+
+      <button class="btn" id="generate-btn" onclick="generate()">🚀 生成</button>
+      <div class="error-msg" id="error-msg"></div>
+      <div class="status-bar" id="status-bar"></div>
+    </div>
+
+    <div class="panel result-panel">
+      <h2>结果</h2>
+      <div class="result-placeholder" id="result-area">
+        <span>点击「生成」开始</span>
+      </div>
+      <div class="result-info" id="result-info"></div>
+      <div class="result-actions">
+        <button class="btn btn-secondary" onclick="downloadResult()" id="dl-btn" style="display:none">💾 下载</button>
+        <button class="btn btn-secondary" onclick="openResult()" id="open-btn" style="display:none">🔗 新标签打开</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button id="theme-toggle" style="position:fixed;bottom:20px;right:20px;width:40px;height:40px;border-radius:50%;border:1px solid rgba(128,128,128,0.3);background:var(--card);color:var(--text);font-size:1.2rem;cursor:pointer;z-index:9999;display:flex;align-items:center;justify-content:center;transition:.2s;box-shadow:0 2px 8px rgba(0,0,0,0.15)" onclick="toggleTheme()" title="切换主题">☀️</button>
+
+<script>
+// ── Save/restore full page state ──
+function saveDraft() {
+  if (state._restoring) return;
+  const rows = document.querySelectorAll('#lora-rows .lora-row');
+  const loras = [];
+  rows.forEach(row => {
+    const val = row.querySelector('.lora-value').value;
+    const scale = row.querySelector('.lora-scale').value;
+    if (val) loras.push({ air_id: val, scale });
+  });
+  localStorage.setItem('gen_draft', JSON.stringify({
+    prompt: document.getElementById('prompt').value,
+    negative: document.getElementById('negative').value,
+    platform: state.platform,
+    model: document.getElementById('model').value,
+    count: document.getElementById('count').value,
+    seed: document.getElementById('seed').value,
+    cfg: document.getElementById('cfg').value,
+    loras,
+  }));
+}
+
+function restoreDraft() {
+  state._restoring = true;
+  try {
+    const raw = localStorage.getItem('gen_draft');
+    if (!raw) return;
+    const d = JSON.parse(raw);
+    if (d.prompt) { const p = document.getElementById('prompt'); p.value = p.value || d.prompt; }
+    if (d.negative) { const n = document.getElementById('negative'); n.value = n.value || d.negative; }
+    if (d.platform && d.platform !== state.platform) setPlatform(d.platform);
+    if (d.count) {
+      document.getElementById('count').value = d.count;
+      const cl = document.getElementById('count-wrap').querySelector('.custom-select-label');
+      const co = document.getElementById('count-wrap').querySelector(`.custom-opt[data-value="${d.count}"]`);
+      if (cl && co) { cl.textContent = co.textContent; }
+    }
+    if (d.seed) document.getElementById('seed').value = d.seed;
+    if (d.cfg) document.getElementById('cfg').value = d.cfg;
+    window._draftModel = d.model;
+    window._draftLoras = d.loras;
+  } finally {
+    state._restoring = false;
+  }
+}
+
+// Auto-save on input
+document.addEventListener('input', e => {
+  if (['prompt','negative','seed','count'].includes(e.target.id) ||
+      e.target.closest('.lora-row')) saveDraft();
+});
+document.addEventListener('change', e => {
+  if (e.target.id === 'model') saveDraft();
+});
+// Platform tabs call setPlatform which calls onModelChange — saveDraft is handled there
+// via the lora/input listeners and init final save.
+
+
+let state = {
+  platform: 'runware', resultUrl: null, resultPath: null, generating: false,
+  lorasCache: {},
+  loraRowCount: 0,
+  _restoring: false,
+};
+
+// ════════════════════ Custom Select ════════════════════
+function toggleCustomSelect(wrap) {
+  const isOpen = wrap.classList.contains('open');
+  // Close all others
+  document.querySelectorAll('.custom-select.open').forEach(c => c.classList.remove('open'));
+  if (!isOpen) wrap.classList.add('open');
+}
+
+// Init custom select option clicks
+document.addEventListener('click', function(e) {
+  const opt = e.target.closest('.custom-opt');
+  if (opt) {
+    const wrap = opt.closest('.custom-select');
+    const hidden = wrap.parentElement.querySelector('input[type="hidden"]');
+    const label = wrap.querySelector('.custom-select-label');
+    hidden.value = opt.dataset.value;
+    label.textContent = opt.textContent;
+    // Highlight active
+    wrap.querySelectorAll('.custom-opt').forEach(o => o.classList.remove('active'));
+    opt.classList.add('active');
+    wrap.classList.remove('open');
+    saveDraft();
+    // Trigger model change if model selector
+    if (hidden.id === 'model') onModelChange();
+  // Init count active state
+  (function() {
+    const cv = document.getElementById('count').value;
+    const co = document.querySelector('#count-wrap .custom-opt[data-value="' + cv + '"]');
+    if (co) co.classList.add('active');
+  })();
+  }
+  // Close dropdowns when clicking outside
+  if (!e.target.closest('.custom-select')) {
+    document.querySelectorAll('.custom-select.open').forEach(c => c.classList.remove('open'));
+  }
+});
+
+// ════════════════════ Platform switching ════════════════════
+function setPlatform(p) {
+  state.platform = p;
+  document.getElementById('tab-runware').classList.toggle('active', p === 'runware');
+  document.getElementById('tab-modelslab').classList.toggle('active', p === 'modelslab');
+
+  const wrap = document.getElementById('model-wrap');
+  const dropdown = wrap.querySelector('.custom-select-dropdown');
+  const label = wrap.querySelector('.custom-select-label');
+  const hidden = document.getElementById('model');
+  if (p === 'modelslab') {
+    const models = [
+      { id: 'pony', name: 'Pony Diffusion', price: '~$0.0047' },
+      { id: 'illustrious', name: 'Illustrious Hassaku XL', price: '~$0.0047' },
+      { id: 'sdxl', name: 'SDXL', price: '~$0.0047' },
+      { id: 'flux', name: 'FLUX.1-dev', price: '~$0.0047' },
+    ];
+    dropdown.innerHTML = models.map(m =>
+      `<div class="custom-opt${m.id === hidden.value ? ' active' : ''}" data-value="${m.id}">${m.name} (${m.price})</div>`
+    ).join('');
+    const cur = models.find(m => m.id === hidden.value);
+    if (!cur && models[0]) { hidden.value = models[0].id; }
+    label.textContent = cur ? `${cur.name} (${cur.price})` : `${models[0].name} (${models[0].price})`;
+  } else {
+    loadModels();
+  }
+
+  const isRunware = p === 'runware';
+  const isModelslab = p === 'modelslab';
+  document.getElementById('modelslab-info').style.display = isModelslab ? 'block' : 'none';
+  document.getElementById('lora-group-runware').style.display = isRunware ? 'block' : 'none';
+  document.getElementById('lora-group-modelslab').style.display = isModelslab ? 'block' : 'none';
+
+  onModelChange();
+  saveDraft();
+}
+
+// ════════════════════ Models ════════════════════
+async function init() {
+  await loadModels();
+  restoreDraft();
+
+  // Apply saved model
+  if (window._draftModel) {
+    const hidden = document.getElementById('model');
+    const dropdown = document.getElementById('model-wrap').querySelector('.custom-select-dropdown');
+    const label = document.getElementById('model-wrap').querySelector('.custom-select-label');
+    const opt = dropdown.querySelector(`.custom-opt[data-value="${window._draftModel}"]`);
+    if (opt) {
+      hidden.value = window._draftModel;
+      label.textContent = opt.textContent;
+      dropdown.querySelectorAll('.custom-opt').forEach(o => o.classList.remove('active'));
+      opt.classList.add('active');
+    }
+  }
+
+  // Clear and rebuild LoRA rows from draft
+  const container = document.getElementById('lora-rows');
+  container.innerHTML = '';
+  state.loraRowCount = 0;
+
+  await onModelChange(); // loads loras, refreshes all row dropdowns
+
+  const savedLoras = window._draftLoras || [];
+  if (savedLoras.length === 0) savedLoras.push({});
+  const model = document.getElementById('model').value;
+  const loras = state.lorasCache[model] || [];
+
+  for (const s of savedLoras) {
+    const row = createLoraRow(loras, s.air_id, s.scale);
+    container.appendChild(row);
+    state.loraRowCount++;
+  }
+  updateLoraCount();
+  updateRemoveButtons();
+  saveDraft();
+}
+
+async function loadModels() {
+  const wrap = document.getElementById('model-wrap');
+  const dropdown = wrap.querySelector('.custom-select-dropdown');
+  const label = wrap.querySelector('.custom-select-label');
+  const hidden = document.getElementById('model');
+  try {
+    const r = await fetch('/api/list-models');
+    const data = await r.json();
+    let models;
+    if (data.success && data.models.length) {
+      models = data.models;
+    } else {
+      models = [
+        { id: 'flux-dev', name: 'FLUX.1-dev', price: '$0.0013/张' },
+        { id: 'pony-xl', name: 'Prefect Pony XL v3', price: '$0.0013/张' },
+        { id: 'prefect-ill-xl', name: 'Prefect Illustrious XL v8', price: '~$0.003/张' },
+        { id: 'qwen-edit', name: 'Qwen-Image-Edit', price: '$0.0019/次' },
+      ];
+    }
+    const curVal = hidden.value;
+    dropdown.innerHTML = models.map(m =>
+      `<div class="custom-opt${m.id === curVal ? ' active' : ''}" data-value="${m.id}">${m.name} (${m.price})</div>`
+    ).join('');
+    // Update label
+    const active = models.find(m => m.id === curVal);
+    label.textContent = active ? `${active.name} (${active.price})` : (models[0] ? `${models[0].name} (${models[0].price})` : '');
+    if (!active && models[0]) { hidden.value = models[0].id; }
+  } catch(e) {
+    dropdown.innerHTML = [
+      { id: 'flux-dev', name: 'FLUX.1-dev' },
+      { id: 'pony-xl', name: 'Prefect Pony XL v3' },
+      { id: 'prefect-ill-xl', name: 'Prefect Illustrious XL v8' },
+    ].map(m => `<div class="custom-opt${m.id === hidden.value ? ' active' : ''}" data-value="${m.id}">${m.name}</div>`).join('');
+    const cur = dropdown.querySelector('.custom-opt.active');
+    label.textContent = cur ? cur.textContent : 'FLUX.1-dev';
+  }
+}
+
+// ════════════════════ LoRA Registry ════════════════════
+async function loadLoras(model) {
+  if (state.lorasCache[model]) return state.lorasCache[model];
+  try {
+    const r = await fetch(`/api/list-loras?model=${encodeURIComponent(model)}`);
+    const data = await r.json();
+    const loras = data.success ? data.loras : [];
+    state.lorasCache[model] = loras;
+    return loras;
+  } catch(e) {
+    state.lorasCache[model] = [];
+    return [];
+  }
+}
+
+async function onModelChange() {
+  const model = document.getElementById('model').value;
+  if (state.platform !== 'runware') {
+    document.getElementById('nsfw-pony-group').style.display = 'none';
+    return;
+  }
+  const isPonyIllu = model === 'pony-xl' || model === 'prefect-ill-xl';
+  document.getElementById('nsfw-pony-group').style.display = isPonyIllu ? 'block' : 'none';
+
+  // Qwen-Edit: show image upload
+  document.getElementById('qwen-image-group').style.display = model === 'qwen-edit' ? 'block' : 'none';
+  // Auto-set CFG placeholder per model
+  const cfgInput = document.getElementById('cfg');
+  const defaults = { 'flux-dev': 3.5, 'pony-xl': 6, 'prefect-ill-xl': 6, 'qwen-edit': null };
+  cfgInput.placeholder = defaults[model] != null ? `默认 ${defaults[model]}` : 'N/A';
+  if (model === 'qwen-edit') { cfgInput.disabled = true; cfgInput.value = ''; }
+  else { cfgInput.disabled = false; }
+
+  // Preload LoRA cache for search inputs
+  await loadLoras(model);
+  saveDraft();
+}
+
+// ════════════════════ LoRA Row Management ════════════════════
+function createLoraRow(loras, selectedId, selectedScale) {
+  const row = document.createElement('div');
+  row.className = 'lora-row';
+  row.innerHTML = `
+    <div class="lora-picker-wrap">
+      <input type="text" class="lora-search" placeholder="搜索 LoRA 或输入 CivitAI ID…" autocomplete="off">
+      <input type="hidden" class="lora-value" value="${selectedId || ''}">
+      <div class="lora-dropdown"></div>
+    </div>
+    <input type="number" class="lora-scale" value="${selectedScale || 0.8}" min="0" max="2" step="0.05">
+    <button class="lora-remove" onclick="removeLoraRow(this)" title="移除">×</button>
+  `;
+  // Bind events
+  const search = row.querySelector('.lora-search');
+  const valueEl = row.querySelector('.lora-value');
+  const dropdown = row.querySelector('.lora-dropdown');
+  search.addEventListener('focus', () => filterLoraDropdown(row, loras));
+  search.addEventListener('input', () => filterLoraDropdown(row, loras));
+  search.addEventListener('blur', () => setTimeout(() => dropdown.classList.remove('open'), 150));
+  search.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') { dropdown.classList.remove('open'); search.blur(); }
+    if (e.key === 'Enter') {
+      const sel = dropdown.querySelector('.lora-opt:hover') || dropdown.querySelector('.lora-opt');
+      if (sel) { sel.click(); e.preventDefault(); }
+    }
+  });
+  // If pre-selected, show name
+  if (selectedId) {
+    const match = loras.find(l => l.air_id === selectedId);
+    search.value = match ? match.name : selectedId;
+    search.classList.add('has-value');
+  }
+  return row;
+}
+
+function filterLoraDropdown(row, loras) {
+  const search = row.querySelector('.lora-search');
+  const valueEl = row.querySelector('.lora-value');
+  const dropdown = row.querySelector('.lora-dropdown');
+  const q = search.value.toLowerCase().trim();
+
+  // Fallback to cache if loras is empty
+  if (!loras || !loras.length) {
+    const model = document.getElementById('model').value;
+    loras = state.lorasCache[model] || [];
+  }
+
+  let html = '';
+  // "— 不启用 —" always first
+  html += `<div class="lora-opt none" onclick="selectLora(this)">— 不启用 —</div>`;
+  // "✏️ 手动输入" — when there's text, or always
+  html += `<div class="lora-opt custom" onclick="selectLora(this)">✏️ 手动输入 CivitAI ID…</div>`;
+
+  const filtered = (loras || []).filter(l => l.name.toLowerCase().includes(q));
+  if (filtered.length === 0 && q) {
+    html += `<div class="lora-no-results">无匹配 — 按回车使用「${search.value}」</div>`;
+  } else {
+    html += filtered.map(l => {
+      const sel = l.air_id === valueEl.value ? ' selected' : '';
+      return `<div class="lora-opt${sel}" data-id="${l.air_id}" data-scale="${l.default_scale}" data-min="${l.scale_range[0]}" data-max="${l.scale_range[1]}" onclick="selectLora(this)">${l.name}</div>`;
+    }).join('');
+  }
+  dropdown.innerHTML = html;
+  dropdown.classList.add('open');
+}
+
+function selectLora(el) {
+  const row = el.closest('.lora-row');
+  const search = row.querySelector('.lora-search');
+  const valueEl = row.querySelector('.lora-value');
+  const scale = row.querySelector('.lora-scale');
+  const dropdown = row.querySelector('.lora-dropdown');
+
+  if (el.classList.contains('none')) {
+    // Clear selection
+    valueEl.value = '';
+    search.value = '';
+    search.classList.remove('has-value');
+    search.placeholder = '搜索 LoRA 或输入 CivitAI ID…';
+  } else if (el.classList.contains('custom')) {
+    // Custom — use whatever user typed
+    const q = search.value.trim();
+    valueEl.value = q;
+    search.value = q;
+    search.classList.add('has-value');
+  } else {
+    valueEl.value = el.dataset.id;
+    search.value = el.textContent;
+    search.classList.add('has-value');
+    if (el.dataset.scale) scale.value = el.dataset.scale;
+    if (el.dataset.min) scale.min = el.dataset.min;
+    if (el.dataset.max) scale.max = el.dataset.max;
+  }
+  dropdown.classList.remove('open');
+  updateLoraCount();
+  saveDraft();
+}
+
+function addLoraRow() {
+  const model = document.getElementById('model').value;
+  const loras = state.lorasCache[model] || [];
+  const row = createLoraRow(loras);
+  document.getElementById('lora-rows').appendChild(row);
+  state.loraRowCount++;
+  updateLoraCount();
+  updateRemoveButtons();
+  saveDraft();
+}
+
+function removeLoraRow(btn) {
+  const container = document.getElementById('lora-rows');
+  if (container.children.length <= 1) return;
+  btn.closest('.lora-row').remove();
+  state.loraRowCount = Math.max(0, state.loraRowCount - 1);
+  updateLoraCount();
+  updateRemoveButtons();
+  saveDraft();
+}
+
+function updateLoraCount() {
+  const container = document.getElementById('lora-rows');
+  const active = [...container.querySelectorAll('.lora-value')].filter(v => v.value).length;
+  document.getElementById('lora-count').textContent = `${active} 个`;
+}
+
+function updateRemoveButtons() {
+  const container = document.getElementById('lora-rows');
+  const btns = container.querySelectorAll('.lora-remove');
+  btns.forEach((b, i) => { b.style.display = btns.length > 1 ? 'flex' : 'none'; });
+}
+
+// ════════════════════ Collect LoRA data from rows ════════════════════
+function collectLoras() {
+  const rows = document.querySelectorAll('#lora-rows .lora-row');
+  const ids = [], scales = [];
+  rows.forEach(row => {
+    const val = row.querySelector('.lora-value').value;
+    const scale = parseFloat(row.querySelector('.lora-scale').value) || 0.8;
+    if (val) { ids.push(val); scales.push(scale); }
+  });
+  return { ids, scales };
+}
+
+// ════════════════════ Generate ════════════════════
+async function generate() {
+  if (state.generating) return;
+  const prompt = document.getElementById('prompt').value.trim();
+  if (!prompt) { showError('请输入 prompt'); return; }
+
+  const count = parseInt(document.getElementById('count').value) || 1;
+  state.generating = true; setGenerating(true);
+  const model = document.getElementById('model').value;
+
+  // Immediately show generating state in result area
+  hideError();
+  document.getElementById('result-area').innerHTML = '<span>⏳ 生成中…</span>';
+  document.getElementById('result-info').textContent = '';
+  document.getElementById('dl-btn').style.display = 'none';
+  document.getElementById('open-btn').style.display = 'none';
+
+  // Auto-inject rating_explicit for Pony/Illu NSFW
+  let effectivePrompt = prompt;
+  if (state.platform === 'runware' && (model === 'pony-xl' || model === 'prefect-ill-xl')) {
+    if (document.getElementById('nsfw_pony').checked) {
+      effectivePrompt = 'rating_explicit, ' + prompt;
+    }
+  }
+
+  const baseBody = {
+    action: 'generate',
+    platform: state.platform,
+    prompt: effectivePrompt,
+    negative_prompt: document.getElementById('negative').value.trim(),
+    model: model,
+    seed: null, // will set per-image
+  };
+
+  if (state.platform === 'runware') {
+    const { ids, scales } = collectLoras();
+    baseBody.lora_id = ids.length ? ids.join(',') : null;
+    baseBody.lora_scale = ids.length ? scales.join(',') : null;
+    if (model === 'pony-xl' || model === 'prefect-ill-xl') baseBody.nsfw = document.getElementById('nsfw_pony').checked;
+  } else if (state.platform === 'modelslab') {
+    baseBody.lora_model = document.getElementById('lora_modelslab').value || null;
+    baseBody.lora_strength = 0.7;
+  }
+
+  // Qwen-Edit: read source image
+  if (model === 'qwen-edit') {
+    const qwenInput = document.getElementById('qwen_image_input');
+    if (!qwenInput.files || !qwenInput.files[0]) {
+      showError('Qwen-Edit 必须上传要编辑的图片');
+      state.generating = false; setGenerating(false);
+      return;
+    }
+    try {
+      baseBody.image_path = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = () => reject(new Error('File read failed'));
+        reader.readAsDataURL(qwenInput.files[0]);
+      });
+    } catch(e) {
+      showError('图片读取失败');
+      state.generating = false; setGenerating(false);
+      return;
+    }
+  }
+
+  hideError();
+  document.getElementById('result-area').innerHTML = '<span>⏳ 生成中…</span>';
+  document.getElementById('result-info').textContent = '';
+  document.getElementById('dl-btn').style.display = 'none';
+  document.getElementById('open-btn').style.display = 'none';
+
+  const results = [];
+  const baseSeed = document.getElementById('seed').value ? parseInt(document.getElementById('seed').value) : null;
+  const cfgVal = document.getElementById('cfg').value;
+  const cfgScale = cfgVal ? parseFloat(cfgVal) : null;
+
+  // ── Phase 1: Submit all jobs (instant, returns job_ids) ──
+  const jobs = [];
+  for (let i = 0; i < count; i++) {
+    const body = { ...baseBody };
+    body.seed = baseSeed !== null ? (baseSeed + i) : null;
+    if (cfgScale !== null) body.cfg_scale = cfgScale;
+    jobs.push(
+      fetch('/api/generate', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      }).then(r => r.json()).catch(e => ({ error: `请求失败: ${e.message}` }))
+    );
+  }
+  setStatus(`⏳ 已提交 ${count} 个任务…`, 'loading');
+  const jobResponses = await Promise.all(jobs);
+
+  const pending = [];
+  for (const r of jobResponses) {
+    if (r.job_id) {
+      pending.push({ job_id: r.job_id, seed: r.seed, index: pending.length });
+    } else {
+      results.push({ error: r.error || '提交失败' });
+    }
+  }
+  if (pending.length === 0 && results.length > 0) {
+    showError(results[0].error);
+    state.generating = false; setGenerating(false);
+    return;
+  }
+
+  // ── Phase 2: Poll until all done ──
+  const POLL_INTERVAL = 2000;
+  const done = new Map(); // job_id → result
+
+  await new Promise(resolve => {
+    const poll = async () => {
+      const stillRunning = pending.filter(j => !done.has(j.job_id));
+      if (stillRunning.length === 0) { resolve(); return; }
+
+      const checks = stillRunning.map(j =>
+        fetch(`/api/job?job=${j.job_id}`).then(r => r.json()).catch(() => ({ status: 'error' }))
+      );
+      const statuses = await Promise.all(checks);
+
+      for (let i = 0; i < stillRunning.length; i++) {
+        const st = statuses[i];
+        if (st.status === 'done') {
+          done.set(stillRunning[i].job_id, st.result);
+        }
+      }
+      const n = done.size;
+      setStatus(`⏳ ${n}/${pending.length} 完成…`, 'loading');
+
+      if (done.size < pending.length) {
+        setTimeout(poll, POLL_INTERVAL);
+      } else {
+        resolve();
+      }
+    };
+    poll();
+  });
+
+  // ── Collect results in order ──
+  for (const j of pending) {
+    const r = done.get(j.job_id);
+    if (r && r.success && r.url) {
+      results.push(r);
+    } else {
+      results.push({ error: (r && r.error) || '生成失败' });
+    }
+  }
+
+  // Display results
+  if (results.length === 1 && results[0].url) {
+    state.resultUrl = results[0].url; state.resultPath = results[0].path || null;
+    document.getElementById('result-area').innerHTML = `<img src="${results[0].url}" alt="生成结果">`;
+    document.getElementById('result-info').textContent = `✅ ${results[0].message || '完成'}${results[0].size ? ` · ${(results[0].size/1024).toFixed(0)}KB` : ''}${results[0].seed != null ? ` · 🎲 ${results[0].seed}` : ''}`;
+    document.getElementById('dl-btn').style.display = 'block';
+    document.getElementById('open-btn').style.display = 'block';
+    setStatus('✅ 完成', 'done');
+  } else if (results.length > 1) {
+    state.resultUrl = results.filter(r => r.url).pop()?.url || null;
+    const gridHtml = results.map((r, idx) => {
+      if (r.url) {
+        return `<div class="result-card"><img src="${r.url}" alt="#${idx+1}"><div class="card-label">#${idx+1} · ${(r.size/1024).toFixed(0)}KB${r.seed != null ? ` · 🎲${r.seed}` : ''}</div></div>`;
+      } else {
+        return `<div class="result-card" style="display:flex;align-items:center;justify-content:center;min-height:150px;color:var(--red);border:1px dashed rgba(255,255,255,0.1);border-radius:6px">❌ ${r.error}</div>`;
+      }
+    }).join('');
+    document.getElementById('result-area').innerHTML = `<div class="result-grid">${gridHtml}</div>`;
+    const successCount = results.filter(r => r.url).length;
+    document.getElementById('result-info').textContent = `✅ ${successCount}/${count} 张完成`;
+    document.getElementById('dl-btn').style.display = 'none';
+    document.getElementById('open-btn').style.display = 'none';
+    setStatus(successCount === count ? '✅ 全部完成' : `⚠ ${successCount}/${count} 完成`, successCount === count ? 'done' : '');
+  } else {
+    const errMsg = results[0]?.error || '生成失败';
+    showError(errMsg);
+    document.getElementById('result-area').innerHTML = '<span style="color:var(--red)">❌ 生成失败</span>';
+    setStatus('', '');
+  }
+
+  state.generating = false; setGenerating(false);
+}
+
+function downloadResult() {
+  if (state.resultUrl) {
+    const a = document.createElement('a');
+    a.href = state.resultUrl; a.download = state.resultUrl.split('/').pop() || 'result.png'; a.click();
+  }
+}
+function openResult() { if (state.resultUrl) window.open(state.resultUrl, '_blank'); }
+function setGenerating(v) { document.getElementById('generate-btn').disabled = v; document.getElementById('generate-btn').textContent = v ? '⏳ 生成中…' : '🚀 生成'; }
+function setStatus(msg, cls) { const el = document.getElementById('status-bar'); el.innerHTML = msg ? `<span class="${cls}">${msg}</span>` : ''; }
+function showError(msg) { const el = document.getElementById('error-msg'); el.textContent = '⚠ ' + msg; el.style.display = 'block'; }
+function hideError() { document.getElementById('error-msg').style.display = 'none'; }
+
+(function(){
+  const saved = localStorage.getItem('theme');
+  if (saved === 'light') document.documentElement.setAttribute('data-theme', 'light');
+  window.toggleTheme = function(){
+    const current = document.documentElement.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next); localStorage.setItem('theme', next);
+    const btn = document.getElementById('theme-toggle');
+    if (btn) btn.textContent = next === 'dark' ? '☀️' : '🌙';
+  };
+  setTimeout(function(){
+    const btn = document.getElementById('theme-toggle');
+    const theme = document.documentElement.getAttribute('data-theme');
+    if (btn) btn.textContent = theme === 'dark' ? '☀️' : '🌙';
+  }, 0);
+})();
+
+init();
+</script>
+<script>if("serviceWorker"in navigator)navigator.serviceWorker.register("/sw.js")</script>
+</body>
+</html>

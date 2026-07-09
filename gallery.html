@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="图库">
+<meta name="theme-color" content="#0f0f14">
+<link rel="manifest" href="/manifest.json">
+<title>生图库 · img.0x01.qzz.io</title>
+<style>
+  :root {
+    --bg: #0f0f14;
+    --card: #1a1a24;
+    --accent: #7c5cfc;
+    --green: #4ade80;
+    --pink: #f43f5e;
+    --orange: #fb923c;
+    --text: #e2e8f0;
+    --text2: #94a3b8;
+    --radius: 12px;
+  }
+  [data-theme="light"] { --bg:#f8f9fc; --card:#fff; --accent:#6c4ce0; --green:#16a34a; --pink:#e11d48; --orange:#ea580c; --text:#1e293b; --text2:#64748b; }
+  [data-theme="light"] body { background: radial-gradient(ellipse at 50% 0%, #e8ecf4 0%, #f8f9fc 70%); background-attachment: fixed; }
+  [data-theme="light"] .header { background: rgba(255,255,255,0.7); border-bottom-color: rgba(108,76,224,0.15); }
+  [data-theme="light"] .thumb-card, [data-theme="light"] .modal, [data-theme="light"] .btn, [data-theme="light"] .pagination .page-btn { border-color: rgba(0,0,0,0.06) !important; }
+  [data-theme="light"] .btn { background: rgba(0,0,0,0.03); }
+  [data-theme="light"] .pagination .page-btn { background: rgba(0,0,0,0.03); }
+  [data-theme="light"] .modal-overlay.open { background: rgba(0,0,0,0.5); }
+  [data-theme="light"] .modal-nav { background: rgba(0,0,0,0.3); }
+  [data-theme="light"] .btn.active { box-shadow: 0 0 12px rgba(108,76,224,0.25); }
+  [data-theme="light"] .btn.archive-active { box-shadow: 0 0 12px rgba(234,88,12,0.25); }
+  [data-theme="light"] .pagination .page-btn.active { box-shadow: 0 0 8px rgba(108,76,224,0.25); }
+  [data-theme="light"] input, [data-theme="light"] textarea, [data-theme="light"] select { background: rgba(0,0,0,0.03) !important; border-color: rgba(0,0,0,0.12) !important; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: radial-gradient(ellipse at 50% 0%, #1a1a30 0%, var(--bg) 70%);
+    background-attachment: fixed;
+    color: var(--text);
+    min-height: 100vh;
+  }
+  .header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 24px;
+    border-bottom: 1px solid rgba(124,92,252,0.12);
+    flex-wrap: wrap; gap: 8px;
+    backdrop-filter: blur(8px);
+    background: rgba(15,15,20,0.6);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .header h1 {
+    font-size: 1.1rem; font-weight: 600;
+    background: linear-gradient(135deg, var(--accent), var(--green));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .header-actions { display: flex; gap: 6px; align-items: center; white-space: nowrap; }
+  .btn {
+    padding: 5px 8px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.04); color: var(--text); font-size: 0.75rem;
+    cursor: pointer; transition: all .25s ease;
+    backdrop-filter: blur(4px);
+    white-space: nowrap;
+  }
+  .btn:hover { border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.08); }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn.active {
+    background: var(--accent); border-color: var(--accent); color: #fff;
+    box-shadow: 0 0 12px rgba(124,92,252,0.3);
+  }
+  .btn.archive-active {
+    background: var(--orange); border-color: var(--orange); color: #fff;
+    box-shadow: 0 0 12px rgba(251,146,60,0.3);
+  }
+  .count { color: var(--text2); font-size: 0.85rem; }
+  .filter-bar { display: flex; gap: 6px; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 14px; padding: 20px 24px;
+  }
+  @media (max-width: 500px) {
+    .grid { grid-template-columns: repeat(2, 1fr); gap: 8px; padding: 12px; }
+  }
+  .thumb-card {
+    position: relative;
+    background: var(--card); border-radius: var(--radius);
+    overflow: hidden; cursor: pointer;
+    border: 1px solid rgba(255,255,255,0.04);
+    transition: all .3s cubic-bezier(0.4, 0, 0.2, 1); aspect-ratio: 1;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .thumb-card:hover {
+    border-color: rgba(124,92,252,0.4);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4), 0 0 0 1px rgba(124,92,252,0.15);
+  }
+  .thumb-card img {
+    width: 100%; height: 100%; object-fit: cover;
+    display: block; transition: transform .4s ease;
+  }
+  .thumb-card:hover img { transform: scale(1.05); }
+  .thumb-card .card-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 40%);
+    opacity: 0; transition: opacity .3s ease;
+    display: flex; align-items: flex-end; padding: 8px 10px;
+    pointer-events: none; z-index: 1;
+  }
+  .thumb-card:hover .card-overlay { opacity: 1; }
+  .card-overlay .card-name {
+    color: #fff; font-size: 0.75rem; font-weight: 500;
+    line-height: 1.3; overflow: hidden;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+  }
+  .thumb-card .no-thumb {
+    color: var(--text2); font-size: 0.8rem; text-align: center; padding: 8px;
+  }
+
+  /* Favorite star on thumb */
+  .fav-star {
+    position: absolute; top: 6px; right: 6px;
+    font-size: 1.1rem; line-height: 1;
+    background: rgba(0,0,0,0.35); backdrop-filter: blur(4px);
+    border-radius: 50%;
+    width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; z-index: 2;
+    border: none; color: #fff;
+    transition: .2s ease;
+  }
+  .fav-star:hover { transform: scale(1.15); background: rgba(0,0,0,0.5); }
+  .fav-star.on { color: var(--pink); }
+  .fav-star.off { color: rgba(255,255,255,0.5); }
+  .fav-star.off:hover { color: var(--pink); }
+
+  /* Archive button on thumb */
+  .arch-btn {
+    position: absolute; top: 6px; left: 6px;
+    font-size: 0.95rem; line-height: 1;
+    background: rgba(0,0,0,0.35); backdrop-filter: blur(4px);
+    border-radius: 50%;
+    width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; z-index: 2;
+    border: none; color: #fff;
+    transition: .2s ease;
+  }
+  .arch-btn:hover { transform: scale(1.15); background: rgba(0,0,0,0.5); }
+  .arch-btn.on { color: var(--orange); }
+  .arch-btn.off { color: rgba(255,255,255,0.4); }
+  .arch-btn.off:hover { color: var(--orange); }
+
+  /* Pagination */
+  .pagination {
+    display: flex; align-items: center; justify-content: center;
+    gap: 6px; padding: 16px 24px 24px; flex-wrap: wrap;
+  }
+  .pagination .page-btn {
+    min-width: 34px; height: 34px; border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.03); color: var(--text2); font-size: 0.85rem;
+    cursor: pointer; transition: all .2s ease;
+    backdrop-filter: blur(4px);
+  }
+  .pagination .page-btn:hover { border-color: var(--accent); color: var(--text); background: rgba(124,92,252,0.08); }
+  .pagination .page-btn.active {
+    background: var(--accent); border-color: var(--accent);
+    color: #fff; box-shadow: 0 0 8px rgba(124,92,252,0.3);
+  }
+  .pagination .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+  .pagination .ellipsis { color: var(--text2); font-size: 0.85rem; padding: 0 4px; }
+
+  /* Modal */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; z-index: 1000;
+    background: rgba(0,0,0,0.88); backdrop-filter: blur(12px);
+  }
+  .modal-overlay.open { display: flex; align-items: center; justify-content: center; }
+  .modal {
+    background: var(--card); border-radius: var(--radius);
+    max-width: 95vw; max-height: 95vh; overflow-y: auto;
+    width: 700px; padding: 20px;
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.5);
+    position: relative;
+  }
+  .modal img {
+    width: 100%; border-radius: 8px; display: block;
+    transition: opacity .15s ease;
+  }
+  .modal img.switching { opacity: 0.4; }
+  .modal-top {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 6px;
+  }
+  .modal-actions {
+    display: flex; gap: 6px; justify-content: center;
+    margin-bottom: 8px;
+  }
+  .modal-close {
+    background: none; border: none;
+    color: var(--text2); font-size: 1.5rem; cursor: pointer;
+  }
+  .modal-close:hover { color: var(--text); }
+  .modal-fav-btn, .modal-arch-btn, .modal-del-btn, .modal-send-btn {
+    background: none; border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px; padding: 6px 10px;
+    color: var(--text2); font-size: 0.85rem; cursor: pointer;
+    transition: .15s;
+    margin-left: 4px;
+    white-space: nowrap;
+  }
+  .modal-fav-btn:hover { border-color: var(--pink); }
+  .modal-fav-btn.on { color: var(--pink); border-color: var(--pink); }
+  .modal-arch-btn:hover { border-color: var(--orange); }
+  .modal-arch-btn.on { color: var(--orange); border-color: var(--orange); }
+  .modal-del-btn:hover { border-color: #ef4444; color: #ef4444; }
+  .modal-send-btn:hover { border-color: #3b82f6; color: #3b82f6; }
+  .modal-send-btn.sending { border-color: #3b82f6; color: #3b82f6; opacity: 0.6; pointer-events: none; }
+  .modal-copy-btn {
+    background: none; border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 6px; color: var(--text2); cursor: pointer;
+    font-size: 0.8rem; padding: 2px 8px; margin-left: 6px; transition: .15s;
+    vertical-align: middle;
+  }
+  .modal-copy-btn:hover { border-color: var(--green); color: var(--green); }
+  .modal-copy-btn.copied { color: var(--green); border-color: var(--green); }
+  .modal-meta {
+    margin-top: 16px; word-break: break-word;
+  }
+  .modal-meta .field {
+    margin-bottom: 10px; font-size: 0.9rem; line-height: 1.5;
+  }
+  .modal-meta .label {
+    color: var(--accent); font-weight: 600; display: inline;
+  }
+  .modal-meta .value {
+    color: var(--text); display: inline;
+  }
+  .modal-meta .prompt-text {
+    color: var(--green); display: inline;
+  }
+  .modal-info {
+    margin-top: 12px; display: flex; gap: 16px;
+    color: var(--text2); font-size: 0.8rem; flex-wrap: wrap;
+  }
+  .modal-counter {
+    color: var(--text2); font-size: 0.8rem;
+  }
+
+  /* Nav arrows */
+  .modal-nav {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    background: rgba(0,0,0,0.5); color: #fff;
+    border: none; border-radius: 50%;
+    width: 40px; height: 40px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; z-index: 10;
+    font-size: 1.4rem; line-height: 1;
+    transition: .15s; user-select: none;
+  }
+  .modal-nav:hover { background: rgba(0,0,0,0.8); }
+  .modal-nav.prev { left: -50px; }
+  .modal-nav.next { right: -50px; }
+  @media (max-width: 780px) {
+    .modal-nav.prev { left: -16px; }
+    .modal-nav.next { right: -16px; }
+    .modal-nav { width: 32px; height: 32px; font-size: 1rem; }
+  }
+
+  /* Touch swipe hint area */
+  .modal-swipe-area {
+    position: relative;
+  }
+
+  /* Empty state */
+  .empty {
+    text-align: center; padding: 60px 24px; color: var(--text2);
+  }
+  .empty .big { font-size: 3rem; margin-bottom: 12px; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>✦ 生图库</h1>
+  <div class="header-actions">
+    <div class="filter-bar">
+      <button class="btn active" id="filterAll" onclick="setFilter('all')">全部</button>
+      <button class="btn" id="filterFav" onclick="setFilter('fav')">♥ 收藏</button>
+      <button class="btn" id="filterArchive" onclick="setFilter('archive')">📦 存档</button>
+    </div>
+    <span class="count" id="count"></span>
+    <button class="btn" onclick="rescan()" id="rescanBtn">⟳ 扫描</button>
+  </div>
+</div>
+<div id="grid" class="grid"></div>
+<div id="pagination" class="pagination"></div>
+<div id="empty" class="empty" style="display:none">
+  <div class="big">📭</div>
+  <p id="emptyMsg">还没有生图，先去首页生成一张吧</p>
+</div>
+
+<div class="modal-overlay" id="modal" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-top">
+      <div class="modal-counter" id="modalCounter"></div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-arch-btn" id="modalArchBtn" onclick="toggleArchModal()">📦 存档</button>
+      <button class="modal-fav-btn" id="modalFavBtn" onclick="toggleFavModal()">♡ 收藏</button>
+      <button class="modal-del-btn" id="modalDelBtn" onclick="moveToTrash()">🗑 回收</button>
+      <button class="modal-send-btn" id="modalSendBtn" onclick="sendToTg()">📱 传送</button>
+    </div>
+    <div class="modal-swipe-area">
+      <button class="modal-nav prev" id="navPrev" onclick="event.stopPropagation(); navModal(-1)">‹</button>
+      <img id="modalImg" src="" alt="">
+      <button class="modal-nav next" id="navNext" onclick="event.stopPropagation(); navModal(1)">›</button>
+    </div>
+    <div class="modal-meta" id="modalMeta"></div>
+    <div class="modal-info" id="modalInfo"></div>
+  </div>
+</div>
+
+<script>
+let currentPage = 1;
+let totalPages = 1;
+let totalImages = 0;
+let allImages = [];
+let modalImageList = [];   // the filtered list for modal navigation
+let modalIndex = -1;
+let favorites = new Set();
+let archived = new Set();
+let filterMode = 'all';
+const PER_PAGE = 50;
+
+// ── Load favorites ──
+async function loadFavorites() {
+  try {
+    const res = await fetch('/api/favorites');
+    const data = await res.json();
+    favorites = new Set(data.favorites);
+  } catch(e) {
+    favorites = new Set();
+  }
+}
+
+// ── Load archived ──
+async function loadArchived() {
+  try {
+    const res = await fetch('/api/archived');
+    const data = await res.json();
+    archived = new Set(data.archived);
+  } catch(e) {
+    archived = new Set();
+  }
+}
+
+// ── Toggle favorite ──
+async function toggleFav(filename, updateUI) {
+  const res = await fetch(`/api/favorite?filename=${encodeURIComponent(filename)}`);
+  const data = await res.json();
+  if (data.favorited) {
+    favorites.add(filename);
+  } else {
+    favorites.delete(filename);
+  }
+  if (updateUI) updateUI(filename);
+  // In fav mode, re-filter locally (no server reload)
+  if (filterMode === 'fav') {
+    modalImageList = allImages.filter(img => favorites.has(img.filename));
+    renderGrid(modalImageList);
+    renderPagination(modalImageList.length);
+  }
+}
+
+// ── Toggle archive ──
+async function toggleArch(filename, updateUI) {
+  const res = await fetch(`/api/archive?filename=${encodeURIComponent(filename)}`);
+  if (!res.ok) return;
+  const data = await res.json();
+  if (data.archived) {
+    archived.add(filename);
+  } else {
+    archived.delete(filename);
+  }
+  if (updateUI) updateUI(filename);
+  // If file moved away from current view, remove locally + background refresh
+  if ((filterMode === 'all' || filterMode === 'fav') && data.archived) {
+    removeFromLocal(filename);
+    refreshCache();
+    return;
+  }
+  if (filterMode === 'archive' && !data.archived) {
+    removeFromLocal(filename);
+    refreshCache();
+    return;
+  }
+}
+
+// ── Local remove (no server reload) ──
+function removeFromLocal(filename) {
+  const idx = allImages.findIndex(img => img.filename === filename);
+  if (idx >= 0) allImages.splice(idx, 1);
+  const midx = modalImageList.findIndex(img => img.filename === filename);
+  if (midx >= 0) modalImageList.splice(midx, 1);
+  totalImages--;
+
+  if (modalImageList.length === 0 && currentPage > 1) {
+    // Page empty — fall back to previous page (triggers server load)
+    loadPage(currentPage - 1);
+    return;
+  }
+
+  renderGrid(modalImageList);
+  renderPagination(modalImageList.length);
+  document.getElementById('count').textContent = `${totalImages} 张`;
+  if (totalImages === 0) {
+    document.getElementById('empty').style.display = 'block';
+    document.getElementById('emptyMsg').textContent = filterMode === 'archive'
+      ? '还没有存档图片' : '还没有生图';
+  }
+}
+
+// ── Background cache refresh (non-blocking) ──
+function refreshCache() {
+  fetch('/api/rescan').catch(() => {});
+}
+
+function updateFavUI(filename) {
+  const star = document.querySelector(`.fav-star[data-file="${CSS.escape(filename)}"]`);
+  if (star) {
+    star.textContent = favorites.has(filename) ? '♥' : '♡';
+    star.className = 'fav-star ' + (favorites.has(filename) ? 'on' : 'off');
+  }
+  const modalFav = document.getElementById('modalFavBtn');
+  if (modalFav.dataset.file === filename) {
+    modalFav.textContent = favorites.has(filename) ? '♥ 已收藏' : '♡ 收藏';
+    modalFav.className = 'modal-fav-btn ' + (favorites.has(filename) ? 'on' : '');
+  }
+}
+
+function updateArchUI(filename) {
+  const btn = document.querySelector(`.arch-btn[data-file="${CSS.escape(filename)}"]`);
+  if (btn) {
+    btn.className = 'arch-btn ' + (archived.has(filename) ? 'on' : 'off');
+  }
+  const modalArch = document.getElementById('modalArchBtn');
+  if (modalArch.dataset.file === filename) {
+    modalArch.textContent = archived.has(filename) ? '📤 取出' : '📦 存档';
+    modalArch.className = 'modal-arch-btn ' + (archived.has(filename) ? 'on' : '');
+  }
+}
+
+function updateAllUI(filename) {
+  updateFavUI(filename);
+  updateArchUI(filename);
+}
+
+let modalFilename = '';
+function toggleFavModal() {
+  if (modalFilename) toggleFav(modalFilename, updateAllUI);
+}
+function toggleArchModal() {
+  if (modalFilename) toggleArch(modalFilename, updateAllUI);
+}
+
+function copyPromptMeta(btn) {
+  const prompt = btn.dataset.prompt;
+  navigator.clipboard.writeText(prompt).then(() => {
+    btn.textContent = '✓';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = '📋';
+      btn.classList.remove('copied');
+    }, 1200);
+  });
+}
+
+// ── Send to Telegram ──
+async function sendToTg() {
+  if (!modalFilename) return;
+  const btn = document.getElementById('modalSendBtn');
+  btn.textContent = '⏳ 发送中…';
+  btn.classList.add('sending');
+  try {
+    const res = await fetch(`/api/send?filename=${encodeURIComponent(modalFilename)}`);
+    const data = await res.json();
+    if (data.sent) {
+      btn.textContent = '✅ 已发送';
+      setTimeout(() => { btn.textContent = '📱 传送'; btn.classList.remove('sending'); }, 2000);
+    } else {
+      btn.textContent = '❌ 失败';
+      setTimeout(() => { btn.textContent = '📱 传送'; btn.classList.remove('sending'); }, 2000);
+    }
+  } catch(e) {
+    btn.textContent = '❌ 失败';
+    setTimeout(() => { btn.textContent = '📱 传送'; btn.classList.remove('sending'); }, 2000);
+  }
+}
+
+// ── Trash ──
+async function moveToTrash() {
+  if (!modalFilename) return;
+  const res = await fetch(`/api/trash?filename=${encodeURIComponent(modalFilename)}`);
+  if (!res.ok) return;
+  const data = await res.json();
+  if (!data.trashed) return;
+
+  favorites.delete(modalFilename);
+  archived.delete(modalFilename);
+
+  // Close modal
+  closeModal();
+
+  // Remove locally + background refresh
+  removeFromLocal(modalFilename);
+  refreshCache();
+}
+
+// ── Load page ──
+async function loadPage(page) {
+  let apiFilter = filterMode;
+  if (filterMode === 'archive') apiFilter = 'archive';
+  else if (filterMode === 'fav') apiFilter = 'fav';
+  else apiFilter = 'all';
+
+  const res = await fetch(`/api/images?page=${page}&per_page=${PER_PAGE}&filter=${apiFilter}`);
+  const data = await res.json();
+  currentPage = data.page;
+  totalPages = data.total_pages;
+  totalImages = data.total;
+  allImages = data.images;
+
+  let displayImages = allImages;
+  if (filterMode === 'fav') {
+    displayImages = allImages.filter(img => favorites.has(img.filename));
+  }
+  modalImageList = displayImages;
+
+  renderGrid(displayImages);
+  renderPagination(displayImages.length);
+  document.getElementById('count').textContent = `${data.total} 张`;
+  document.getElementById('empty').style.display = data.total === 0 ? 'block' : 'none';
+}
+
+function enc(f) { return encodeURIComponent(f); }
+
+function renderGrid(images) {
+  const grid = document.getElementById('grid');
+  if (images.length === 0) {
+    grid.innerHTML = '';
+    document.getElementById('empty').style.display = 'block';
+    if (filterMode === 'fav') {
+      document.getElementById('emptyMsg').textContent = '还没有收藏的图片，点击 ♡ 按钮收藏吧';
+    } else if (filterMode === 'archive') {
+      document.getElementById('emptyMsg').textContent = '还没有存档图片，点击 📦 按钮存档吧';
+    } else {
+      document.getElementById('emptyMsg').textContent = '还没有生图，先去首页生成一张吧';
+    }
+    return;
+  }
+  document.getElementById('empty').style.display = 'none';
+  grid.innerHTML = images.map(img => {
+    const isFav = favorites.has(img.filename);
+    const isArch = archived.has(img.filename);
+    return `
+    <div class="thumb-card">
+      <button class="arch-btn ${isArch ? 'on' : 'off'}" data-file="${escapeHtml(img.filename)}"
+              onclick="event.stopPropagation(); toggleArch('${escapeHtml(img.filename)}', updateAllUI)">📦</button>
+      <button class="fav-star ${isFav ? 'on' : 'off'}" data-file="${escapeHtml(img.filename)}"
+              onclick="event.stopPropagation(); toggleFav('${escapeHtml(img.filename)}', updateAllUI)">${isFav ? '♥' : '♡'}</button>
+      <img src="/thumb/${enc(img.filename)}" alt="" loading="lazy"
+           onclick="openModal('${enc(img.filename)}')"
+           onerror="this.parentElement.innerHTML='<div class=\\'no-thumb\\'>${escapeHtml(img.filename)}</div>'">
+      <div class="card-overlay"><span class="card-name">${escapeHtml(img.filename)}</span></div>
+    </div>`;
+  }).join('');
+}
+
+function renderPagination(displayCount) {
+  const el = document.getElementById('pagination');
+  if (filterMode === 'fav') {
+    if (totalImages <= PER_PAGE) { el.innerHTML = ''; return; }
+  }
+  if (totalPages <= 1) { el.innerHTML = ''; return; }
+
+  let html = '';
+  const p = currentPage, t = totalPages;
+  html += `<button class="page-btn" ${p <= 1 ? 'disabled' : ''} onclick="loadPage(${p-1})">‹</button>`;
+  let pages = [];
+  if (t <= 7) {
+    pages = Array.from({length: t}, (_, i) => i + 1);
+  } else {
+    pages.push(1);
+    if (p > 3) pages.push('...');
+    for (let i = Math.max(2, p - 1); i <= Math.min(t - 1, p + 1); i++) pages.push(i);
+    if (p < t - 2) pages.push('...');
+    pages.push(t);
+  }
+  pages.forEach(pp => {
+    if (pp === '...') {
+      html += `<span class="ellipsis">…</span>`;
+    } else {
+      html += `<button class="page-btn ${pp === p ? 'active' : ''}" onclick="loadPage(${pp})">${pp}</button>`;
+    }
+  });
+  html += `<button class="page-btn" ${p >= t ? 'disabled' : ''} onclick="loadPage(${p+1})">›</button>`;
+  // Page jump input
+  html += `<span style="margin-left:8px;display:inline-flex;align-items:center;gap:4px;color:var(--text2);font-size:0.85rem">
+    <input id="pageJump" type="number" min="1" max="${t}" value="${p}"
+           style="width:48px;padding:4px 6px;border-radius:6px;border:1px solid rgba(255,255,255,0.1);background:var(--card);color:var(--text);font-size:0.85rem;text-align:center;outline:none"
+           onfocus="this.select()"
+           onkeydown="if(event.key==='Enter')goToPage(this.value)">
+    <button class="page-btn" style="min-width:auto;padding:0 8px" onclick="goToPage(document.getElementById('pageJump').value)">跳</button>
+  </span>`;
+  el.innerHTML = html;
+}
+
+function goToPage(page) {
+  const p = parseInt(page);
+  if (p >= 1 && p <= totalPages && p !== currentPage) loadPage(p);
+}
+
+// ── Modal with navigation ──
+function openModal(filename) {
+  const decoded = decodeURIComponent(filename);
+  modalIndex = modalImageList.findIndex(img => img.filename === decoded);
+  if (modalIndex === -1) return;
+  showModalImage();
+}
+
+function showModalImage() {
+  if (modalIndex < 0 || modalIndex >= modalImageList.length) return;
+  const img = modalImageList[modalIndex];
+  if (!img) return;
+
+  // Refresh effect: dim image briefly
+  const modalImg = document.getElementById('modalImg');
+  modalImg.classList.add('switching');
+
+  modalFilename = img.filename;
+
+  // Calculate global index (across all pages)
+  const globalIdx = (currentPage - 1) * PER_PAGE + modalIndex + 1;
+  document.getElementById('modalCounter').textContent = `${globalIdx} / ${totalImages}`;
+
+  // Set src after dim, remove dim on load
+  modalImg.src = `/raw/${encodeURIComponent(img.filename)}`;
+  modalImg.onload = () => modalImg.classList.remove('switching');
+
+  // Nav buttons visibility
+  document.getElementById('navPrev').style.display = modalIndex > 0 ? 'flex' : 'none';
+  document.getElementById('navNext').style.display = modalIndex < modalImageList.length - 1 ? 'flex' : 'none';
+
+  // Fav button
+  const isFav = favorites.has(img.filename);
+  const favBtn = document.getElementById('modalFavBtn');
+  favBtn.textContent = isFav ? '♥ 已收藏' : '♡ 收藏';
+  favBtn.className = 'modal-fav-btn ' + (isFav ? 'on' : '');
+  favBtn.dataset.file = img.filename;
+
+  // Archive button
+  const isArch = archived.has(img.filename);
+  const archBtn = document.getElementById('modalArchBtn');
+  archBtn.textContent = isArch ? '📤 取出' : '📦 存档';
+  archBtn.className = 'modal-arch-btn ' + (isArch ? 'on' : '');
+  archBtn.dataset.file = img.filename;
+
+  // Metadata — lazy load from /api/meta
+  const meta = document.getElementById('modalMeta');
+  meta.innerHTML = '<div class="field"><span class="value" style="color:var(--text2)">加载中…</span></div>';
+  fetch(`/api/meta?filename=${encodeURIComponent(img.filename)}`)
+    .then(r => r.json())
+    .then(m => {
+      let html = '';
+      if (m.prompt) {
+        const escaped = escapeHtml(m.prompt);
+        html += `<div class="field"><span class="label">Prompt  </span><span class="prompt-text">${escaped}</span> <button class="modal-copy-btn" onclick="copyPromptMeta(this)" data-prompt="${escaped}">📋</button></div>`;
+      }
+      if (m.params) {
+        const rest = m.params.replace(/^Prompt:.*?(\n|$)/, '').replace(/^\n/, '');
+        html += `<div class="field"><span class="label">参数  </span><span class="value">${escapeHtml(rest)}</span></div>`;
+      }
+      meta.innerHTML = html || '<div class="field"><span class="value" style="color:var(--text2)">无 metadata</span></div>';
+      // Update model in info bar
+      document.getElementById('modalInfo').innerHTML = `
+        <span>${img.filename}</span>
+        <span>${img.size_kb} KB</span>
+        <span>${m.model || ''}</span>
+      `;
+    })
+    .catch(() => {
+      meta.innerHTML = '';
+    });
+
+  document.getElementById('modalInfo').innerHTML = `
+    <span>${img.filename}</span>
+    <span>${img.size_kb} KB</span>
+    <span>${img.model ? img.model : ''}</span>
+  `;
+
+  const modal = document.getElementById('modal');
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  // Scroll modal to top on navigation
+  modal.querySelector('.modal').scrollTop = 0;
+}
+
+function navModal(direction) {
+  const newIdx = modalIndex + direction;
+  // Within current page
+  if (newIdx >= 0 && newIdx < modalImageList.length) {
+    modalIndex = newIdx;
+    showModalImage();
+    return;
+  }
+  // Cross-page: need to load another page
+  const targetPage = direction > 0 ? currentPage + 1 : currentPage - 1;
+  if (targetPage < 1 || targetPage > totalPages) return;
+
+  // Show switching effect immediately
+  const modalImg = document.getElementById('modalImg');
+  modalImg.classList.add('switching');
+
+  // Load the target page, then open the boundary image
+  let apiFilter = filterMode === 'archive' ? 'archive' : 'all';
+  if (filterMode === 'fav') apiFilter = 'fav';
+  fetch(`/api/images?page=${targetPage}&per_page=${PER_PAGE}&filter=${apiFilter}`)
+    .then(r => r.json())
+    .then(data => {
+      currentPage = data.page;
+      totalPages = data.total_pages;
+      totalImages = data.total;
+      allImages = data.images;
+
+      let displayImages = allImages;
+      if (filterMode === 'fav') {
+        displayImages = allImages.filter(img => favorites.has(img.filename));
+      }
+      modalImageList = displayImages;
+
+      // Set modalIndex to boundary: first image (next page) or last (prev page)
+      modalIndex = direction > 0 ? 0 : modalImageList.length - 1;
+      showModalImage();
+    });
+}
+
+function closeModal(e) {
+  if (e && e.target !== document.getElementById('modal').querySelector('.modal') && e.target.closest('.modal')) return;
+  document.getElementById('modal').classList.remove('open');
+  document.body.style.overflow = '';
+  // Sync grid to wherever the user browsed to in the modal
+  renderGrid(modalImageList);
+  renderPagination(modalImageList.length);
+  // Update page counter in header
+  document.getElementById('count').textContent = `${totalImages} 张`;
+  // Scroll last viewed image into view
+  const lastImg = modalImageList[modalIndex];
+  if (lastImg) {
+    const cards = document.querySelectorAll('.thumb-card');
+    // The card index matches the image index in modalImageList
+    const card = cards[modalIndex];
+    if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+}
+
+// ── Touch swipe support ──
+let touchStartX = 0;
+let touchStartY = 0;
+let isPinching = false;
+
+document.addEventListener('touchstart', e => {
+  if (!document.getElementById('modal').classList.contains('open')) return;
+  if (e.touches.length > 1) { isPinching = true; return; }
+  isPinching = false;
+  touchStartX = e.changedTouches[0].screenX;
+  touchStartY = e.changedTouches[0].screenY;
+}, {passive: true});
+
+document.addEventListener('touchmove', e => {
+  if (!document.getElementById('modal').classList.contains('open')) return;
+  if (e.touches.length > 1) isPinching = true;
+}, {passive: true});
+
+document.addEventListener('touchend', e => {
+  if (!document.getElementById('modal').classList.contains('open')) return;
+  if (isPinching || e.touches.length > 1) return;
+  const dx = e.changedTouches[0].screenX - touchStartX;
+  const dy = e.changedTouches[0].screenY - touchStartY;
+  if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+    if (dx < 0) navModal(1);
+    else navModal(-1);
+  }
+}, {passive: true});
+
+function setFilter(mode) {
+  filterMode = mode;
+  document.getElementById('filterAll').className = 'btn' + (mode === 'all' ? ' active' : '');
+  document.getElementById('filterFav').className = 'btn' + (mode === 'fav' ? ' active' : '');
+  document.getElementById('filterArchive').className = 'btn' + (mode === 'archive' ? ' archive-active' : '');
+  loadPage(1);
+}
+
+async function rescan() {
+  const btn = document.getElementById('rescanBtn');
+  btn.disabled = true; btn.textContent = '⟳ 扫描中...';
+  await fetch('/api/rescan');
+  await loadFavorites();
+  await loadArchived();
+  await loadPage(1);
+  btn.disabled = false; btn.textContent = '⟳ 扫描';
+}
+
+function escapeHtml(s) {
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+// Keyboard
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('modal').classList.contains('open')) return;
+  if (e.key === 'Escape') closeModal();
+  if (e.key === 'ArrowLeft') navModal(-1);
+  if (e.key === 'ArrowRight') navModal(1);
+});
+
+// Init
+Promise.all([loadFavorites(), loadArchived()]).then(() => loadPage(1));
+</script>
+
+<button id="theme-toggle" style="position:fixed;bottom:20px;right:20px;width:40px;height:40px;border-radius:50%;border:1px solid rgba(128,128,128,0.3);background:var(--card);color:var(--text);font-size:1.2rem;cursor:pointer;z-index:9999;display:flex;align-items:center;justify-content:center;transition:.2s;box-shadow:0 2px 8px rgba(0,0,0,0.15)" onclick="toggleTheme()" title="切换主题">☀️</button>
+
+<script>
+(function(){
+  const saved = localStorage.getItem('theme');
+  if (saved === 'light') document.documentElement.setAttribute('data-theme', 'light');
+  window.toggleTheme = function(){
+    const current = document.documentElement.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+    const btn = document.getElementById('theme-toggle');
+    if (btn) btn.textContent = next === 'dark' ? '☀️' : '🌙';
+  };
+  setTimeout(function(){
+    const btn = document.getElementById('theme-toggle');
+    const theme = document.documentElement.getAttribute('data-theme');
+    if (btn) btn.textContent = theme === 'dark' ? '☀️' : '🌙';
+  }, 0);
+})();
+</script>
+<script>if("serviceWorker"in navigator)navigator.serviceWorker.register("/sw.js")</script>
+</body>
+</html>

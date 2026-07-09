@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="鹿鹿面板">
+<meta name="theme-color" content="#0f0f14">
+<link rel="manifest" href="/manifest.json">
+<title>鹿鹿 · 主机面板</title>
+<style>
+  :root {
+    --bg: #0f0f14;
+    --card: #1a1a24;
+    --accent: #7c5cfc;
+    --accent2: #5ce1fc;
+    --green: #4ade80;
+    --yellow: #facc15;
+    --red: #f87171;
+    --text: #e2e8f0;
+    --text2: #94a3b8;
+    --radius: 12px;
+    --orange: #fb923c;
+  }
+  [data-theme="light"] { --bg:#f8f9fc; --card:#fff; --accent:#6c4ce0; --accent2:#3ba5d4; --green:#16a34a; --yellow:#ca8a04; --red:#dc2626; --text:#1e293b; --text2:#64748b; --orange:#ea580c; }
+  [data-theme="light"] .card, [data-theme="light"] .widget, [data-theme="light"] .host-resource, [data-theme="light"] .node-card, [data-theme="light"] .badge-host, [data-theme="light"] .footer { border-color: rgba(0,0,0,0.08) !important; }
+  [data-theme="light"] .badge-host { background: rgba(0,0,0,0.04); }
+  [data-theme="light"] .bar-bg { background: rgba(0,0,0,0.06) !important; }
+  [data-theme="light"] .container-badge { border-color: rgba(0,0,0,0.12) !important; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 32px;
+  }
+  .container { max-width: 1100px; margin: 0 auto; }
+
+  /* Header */
+  .header {
+    margin-bottom: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .header h1 {
+    font-size: 2rem;
+    background: linear-gradient(135deg, var(--orange), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .header p { color: var(--text2); margin-top: 4px; font-size: 0.9rem; }
+
+  .host-badges { display: flex; gap: 8px; flex-wrap: wrap; }
+  .badge-host {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+  }
+  .badge-pixel {
+    background: rgba(124, 92, 252, 0.15);
+    color: var(--accent);
+    border: 1px solid rgba(124, 92, 252, 0.3);
+  }
+  .badge-moris {
+    background: rgba(92, 225, 252, 0.12);
+    color: var(--accent2);
+    border: 1px solid rgba(92, 225, 252, 0.25);
+  }
+
+  /* Section */
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95rem;
+    color: var(--text2);
+    margin: 28px 0 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .section-title .sub {
+    font-size: 0.75rem;
+    opacity: 0.6;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  /* Grid */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: var(--radius);
+    padding: 16px;
+    text-decoration: none;
+    color: var(--text);
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(124,92,252,0.15);
+  }
+  .card.pixel-card { border-color: rgba(124, 92, 252, 0.12); }
+  .card.pixel-card:hover { border-color: var(--accent); }
+  .card.moris-card { border-color: rgba(92, 225, 252, 0.12); }
+  .card.moris-card:hover { border-color: var(--accent2); }
+  .card .emoji { font-size: 1.5rem; margin-bottom: 6px; }
+  .card .name { font-weight: 600; font-size: 0.95rem; }
+  .card .desc { color: var(--text2); font-size: 0.8rem; margin-top: 2px; }
+  .card .badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-top: 8px;
+    align-self: flex-start;
+  }
+  .badge-domain { background: rgba(124,92,252,0.15); color: var(--accent); }
+  .badge-tail { background: rgba(92,225,252,0.15); color: var(--accent2); }
+  .badge-moris-domain { background: rgba(92,225,252,0.12); color: var(--accent2); }
+
+  /* Widgets */
+  .widgets {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  .widget {
+    background: var(--card);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: var(--radius);
+    padding: 18px;
+  }
+  .widget h3 {
+    font-size: 0.85rem;
+    color: var(--text2);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .widget .value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+  }
+  .widget .value.green { color: var(--green); }
+  .widget .value.yellow { color: var(--yellow); }
+  .widget .sub {
+    font-size: 0.8rem;
+    color: var(--text2);
+    margin-top: 2px;
+  }
+  .widget .loading { color: var(--text2); font-size: 0.85rem; }
+  .widget .error { color: var(--red); font-size: 0.85rem; }
+
+  /* Progress Bars */
+  .bar { display: flex; align-items: center; gap: 8px; margin: 6px 0; }
+  .bar .label { font-size: 0.75rem; color: var(--text2); width: 36px; flex-shrink: 0; }
+  .bar .bar-bg {
+    flex: 1; height: 6px; background: rgba(255,255,255,0.06);
+    border-radius: 3px; overflow: hidden;
+  }
+  .bar .bar-fill {
+    height: 100%; border-radius: 3px;
+    transition: width 0.5s ease, background 0.5s ease;
+  }
+  .bar .bar-fill.green { background: var(--green); }
+  .bar .bar-fill.yellow { background: var(--yellow); }
+  .bar .bar-fill.orange { background: var(--orange); }
+  .bar .bar-fill.red { background: var(--red); }
+  .bar .pct { font-size: 0.75rem; font-family: 'SF Mono', monospace; color: var(--text2); width: 40px; text-align: right; }
+
+  /* Host resource cards */
+  .host-resource {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 16px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .host-resource.pixel-side { border-color: rgba(124, 92, 252, 0.15); }
+  .host-resource.moris-side { border-color: rgba(92, 225, 252, 0.12); }
+  .host-resource .hrow {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 8px;
+  }
+  .host-resource .hrow h3 { font-size: 0.9rem; }
+  .host-resource .hrow .tag {
+    font-size: 0.7rem; padding: 2px 8px; border-radius: 4px;
+    font-family: 'SF Mono', monospace;
+  }
+  .host-resource .hrow .tag.pixel-tag {
+    background: rgba(124,92,252,0.15); color: var(--accent);
+  }
+  .host-resource .hrow .tag.moris-tag {
+    background: rgba(92,225,252,0.12); color: var(--accent2);
+  }
+  .host-resource .uptime {
+    font-size: 0.75rem; color: var(--text2); margin-bottom: 8px;
+  }
+  .host-resource .info-line {
+    font-size: 0.75rem; color: var(--text2);
+    display: flex; gap: 12px; flex-wrap: wrap;
+  }
+
+  /* Container badges */
+  .containers { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+  .container-badge {
+    font-size: 0.68rem; padding: 2px 8px; border-radius: 4px;
+    background: rgba(74, 222, 128, 0.1); color: var(--green);
+    border: 1px solid rgba(74, 222, 128, 0.15);
+  }
+  .container-badge.stop { background: rgba(248, 113, 113, 0.1); color: var(--red); border-color: rgba(248, 113, 113, 0.15); }
+
+  /* Resource row layout */
+  .resource-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  @media (max-width: 640px) {
+    .resource-row { grid-template-columns: 1fr; }
+  }
+
+  /* Node cards */
+  .node-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  .node-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 18px;
+  }
+  .node-card.pixel { border: 1px solid rgba(124, 92, 252, 0.2); }
+  .node-card.moris { border: 1px solid rgba(92, 225, 252, 0.2); }
+  .node-card h3 { font-size: 0.95rem; margin-bottom: 6px; }
+  .node-card .ip {
+    font-family: 'SF Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--text2);
+  }
+  .node-card .specs {
+    font-size: 0.8rem;
+    color: var(--text2);
+    margin-top: 6px;
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    color: var(--text2);
+    font-size: 0.8rem;
+    padding: 32px 0 16px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .footer .domain {
+    color: var(--orange);
+    font-family: 'SF Mono', monospace;
+  }
+
+  @media (max-width: 640px) {
+    body { padding: 16px; }
+    .node-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    <div>
+      <h1>✦ 鹿鹿的主机</h1>
+    </div>
+    <div class="host-badges">
+      <span class="badge-host badge-pixel">🤖 100.84.160.64</span>
+      <span class="badge-host badge-moris">🏃 100.73.239.42</span>
+    </div>
+  </div>
+
+  <!-- API Widgets -->
+  <div class="section-title">📊 API 余额 <span class="sub" id="api-ts">加载中...</span></div>
+  <div class="widgets" id="widgets">
+    <div class="widget" id="openrouter-widget">
+      <h3>🌐 OpenRouter</h3>
+      <div class="loading">加载中...</div>
+    </div>
+    <div class="widget" id="deepseek-widget">
+      <h3>🧠 DeepSeek</h3>
+      <div class="loading">加载中...</div>
+    </div>
+    <div class="widget" id="runware-widget">
+      <h3>🟣 Runware</h3>
+      <div class="loading">加载中...</div>
+    </div>
+  </div>
+
+  <!-- 🛠 工具 -->
+  <div class="section-title">🛠 工具</div>
+  <div class="grid">
+    <a href="/api-check.html" target="_blank" class="card pixel-card">
+      <div class="emoji">📡</div>
+      <div class="name">万能 API 探测器</div>
+      <div class="desc">余额 · 限流 · 模型 · 一站查清</div>
+      <span class="badge badge-domain">OpenRouter / DeepSeek / 中转站</span>
+    </a>
+    <a href="/gen.html" target="_blank" class="card pixel-card">
+      <div class="emoji">🎨</div>
+      <div class="name">Runware 生图</div>
+      <div class="desc">FLUX 出图 · LoRA 挂载 · 锁脸 · 图床</div>
+      <span class="badge badge-tail">Runware</span>
+    </a>
+    <a href="https://img.0x01.qzz.io" target="_blank" class="card pixel-card">
+      <div class="emoji">🖼️</div>
+      <div class="name">生图库</div>
+      <div class="desc">翻看所有生图 · 浏览 prompt · metadata</div>
+      <span class="badge badge-domain">img.0x01.qzz.io</span>
+    </a>
+  </div>
+
+  <!-- 📡 实时资源 -->
+  <div class="section-title">📡 实时资源 <span class="sub" id="res-ts">加载中...</span></div>
+  <div class="resource-row" id="resource-row">
+    <div class="host-resource pixel-side" id="res-pixel">
+      <div class="hrow">
+        <span class="tag pixel-tag">vps67480</span>
+      </div>
+      <div class="uptime" id="pixel-uptime">加载中...</div>
+      <div class="bar"><span class="label">CPU</span><div class="bar-bg"><div class="bar-fill green" id="pixel-cpu-bar" style="width:0%"></div></div><span class="pct" id="pixel-cpu-pct">0%</span></div>
+      <div class="bar"><span class="label">MEM</span><div class="bar-bg"><div class="bar-fill green" id="pixel-mem-bar" style="width:0%"></div></div><span class="pct" id="pixel-mem-pct">0%</span></div>
+      <div class="bar"><span class="label">DSK</span><div class="bar-bg"><div class="bar-fill green" id="pixel-dsk-bar" style="width:0%"></div></div><span class="pct" id="pixel-dsk-pct">0%</span></div>
+      <div class="info-line"><span id="pixel-load">负载: --</span></div>
+      <div class="containers" id="pixel-containers"></div>
+    </div>
+    <div class="host-resource moris-side" id="res-moris">
+      <div class="hrow">
+        <span class="tag moris-tag">vps67846</span>
+      </div>
+      <div class="uptime" id="moris-uptime">加载中...</div>
+      <div class="bar"><span class="label">CPU</span><div class="bar-bg"><div class="bar-fill green" id="moris-cpu-bar" style="width:0%"></div></div><span class="pct" id="moris-cpu-pct">0%</span></div>
+      <div class="bar"><span class="label">MEM</span><div class="bar-bg"><div class="bar-fill green" id="moris-mem-bar" style="width:0%"></div></div><span class="pct" id="moris-mem-pct">0%</span></div>
+      <div class="bar"><span class="label">DSK</span><div class="bar-bg"><div class="bar-fill green" id="moris-dsk-bar" style="width:0%"></div></div><span class="pct" id="moris-dsk-pct">0%</span></div>
+      <div class="info-line"><span id="moris-load">负载: --</span></div>
+      <div class="containers" id="moris-containers"></div>
+    </div>
+  </div>
+
+  <!-- 🤖 点儿 → vps67480 -->
+  <div class="section-title">
+    vps67480
+  </div>
+  <div class="grid">
+    <a href="https://0x01.qzz.io" target="_blank" class="card pixel-card">
+      <div class="emoji">💬</div>
+      <div class="name">Hermes WebUI</div>
+      <div class="desc">AI 助手对话界面</div>
+      <span class="badge badge-domain">0x01.qzz.io</span>
+      <span class="badge badge-tail">:8648</span>
+    </a>
+    <a href="https://memos.0x01.qzz.io" target="_blank" class="card pixel-card">
+      <div class="emoji">📝</div>
+      <div class="name">Memos</div>
+      <div class="desc">知识笔记 · 双机留言板</div>
+      <span class="badge badge-domain">memos.0x01.qzz.io</span>
+      <span class="badge badge-tail">:5230</span>
+    </a>
+    <a href="https://rss.0x01.qzz.io" target="_blank" class="card pixel-card">
+      <div class="emoji">📰</div>
+      <div class="name">Miniflux</div>
+      <div class="desc">RSS 阅读器</div>
+      <span class="badge badge-domain">rss.0x01.qzz.io</span>
+      <span class="badge badge-tail">:8090</span>
+    </a>
+    <a href="https://dashboard.0x01.qzz.io" target="_blank" class="card pixel-card">
+      <div class="emoji">📊</div>
+      <div class="name">Hermes Dashboard</div>
+      <div class="desc">对话 · 用量 · 统计</div>
+      <span class="badge badge-domain">dashboard.0x01.qzz.io</span>
+      <span class="badge badge-tail">:9119</span>
+    </a>
+  </div>
+
+  <!-- 小默 → vps67846 -->
+  <div class="section-title">
+    vps67846
+  </div>
+  <div class="grid">
+    <a href="https://magnet.0x7f.qzz.io" target="_blank" class="card moris-card">
+      <div class="emoji">🧲</div>
+      <div class="name">Magnet Stream</div>
+      <div class="desc">磁力链在线播放</div>
+      <span class="badge badge-moris-domain">magnet.0x7f.qzz.io</span>
+      <span class="badge badge-tail">:8964</span>
+    </a>
+    <a href="https://vps67846.taildfff12.ts.net:13378" target="_blank" class="card moris-card">
+      <div class="emoji">🎧</div>
+      <div class="name">Audiobookshelf</div>
+      <div class="desc">有声书 · 录音成品库</div>
+      <span class="badge badge-tail">:13378</span>
+    </a>
+  </div>
+
+  <!-- 节点信息 -->
+  <div class="section-title">🌲 主机</div>
+  <div class="node-grid">
+    <div class="node-card pixel">
+      <h3 style="color:var(--accent)"></h3>
+      <div class="ip">100.84.160.64 · vps67480</div>
+      <div class="specs">2C · 8GB · 100GB NVMe · Hermes Agent · 0x01.qzz.io</div>
+    </div>
+    <div class="node-card moris">
+      <h3 style="color:var(--accent2)"></h3>
+      <div class="ip">100.73.239.42 · vps67846</div>
+      <div class="specs">2C · 8GB · 100GB NVMe · SSH :37980 · 0x7f.qzz.io</div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <span class="domain">✦ Tailnet Only ✦</span><br>
+    0x01.qzz.io · 0x7f.qzz.io
+  </div>
+</div>
+
+<button id="theme-toggle" style="position:fixed;bottom:20px;right:20px;width:40px;height:40px;border-radius:50%;border:1px solid rgba(128,128,128,0.3);background:var(--card);color:var(--text);font-size:1.2rem;cursor:pointer;z-index:9999;display:flex;align-items:center;justify-content:center;transition:.2s;box-shadow:0 2px 8px rgba(0,0,0,0.15)" onclick="toggleTheme()" title="切换主题">☀️</button>
+
+<script>
+(function(){
+  const saved = localStorage.getItem('theme');
+  if (saved === 'light') document.documentElement.setAttribute('data-theme', 'light');
+  window.toggleTheme = function(){
+    const current = document.documentElement.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+    const btn = document.getElementById('theme-toggle');
+    if (btn) btn.textContent = next === 'dark' ? '☀️' : '🌙';
+  };
+  setTimeout(function(){
+    const btn = document.getElementById('theme-toggle');
+    const theme = document.documentElement.getAttribute('data-theme');
+    if (btn) btn.textContent = theme === 'dark' ? '☀️' : '🌙';
+  }, 0);
+})();
+</script>
+
+<script>
+function barColor(pct) {
+  if (pct < 50) return 'green';
+  if (pct < 75) return 'yellow';
+  if (pct < 90) return 'orange';
+  return 'red';
+}
+function formatBytes(b) {
+  const gb = b / (1024**3);
+  return gb.toFixed(1) + 'GB';
+}
+
+// ── API 余额 ──
+async function loadStatus() {
+  try {
+    const r = await fetch('/api/status');
+    const data = await r.json();
+
+    // Timestamp
+    const now = new Date();
+    document.getElementById('api-ts').textContent =
+      `⏱ ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+
+    // OpenRouter
+    const ow = document.getElementById('openrouter-widget');
+    if (data.openrouter && !data.openrouter.error) {
+      const or = data.openrouter;
+      const total = parseFloat(or.total_credits) || 0;
+      const usage = parseFloat(or.total_usage) || 0;
+      const remaining = total - usage;
+      const monthly = parseFloat(or.usage_monthly) || 0;
+      const cls = remaining > 5 ? 'green' : remaining > 1 ? 'yellow' : remaining > 0 ? 'orange' : 'red';
+      ow.innerHTML = `
+        <h3>🌐 OpenRouter</h3>
+        <div class="value ${cls}">$${remaining.toFixed(2)}</div>
+        <div class="sub">剩余 · 总额 $${total.toFixed(2)} · 已用 $${usage.toFixed(2)}</div>
+        <div class="sub">本月 $${monthly.toFixed(2)}${or.is_free_tier ? ' · 免费层' : ''}</div>
+      `;
+    } else if (data.openrouter && data.openrouter.error) {
+      ow.innerHTML = `<h3>🌐 OpenRouter</h3><div class="error">⚠ ${data.openrouter.error}</div>`;
+    }
+
+    // DeepSeek
+    const dw = document.getElementById('deepseek-widget');
+    if (data.deepseek && data.deepseek.balance_infos) {
+      const bal = data.deepseek.balance_infos[0];
+      const total = parseFloat(bal.total_balance);
+      const cls = total > 2 ? 'green' : total > 0.5 ? 'yellow' : '';
+      dw.innerHTML = `
+        <h3>🧠 DeepSeek</h3>
+        <div class="value ${cls}">$${total.toFixed(2)}</div>
+        <div class="sub">已充值 $${parseFloat(bal.topped_up_balance).toFixed(2)} · 赠送 $${parseFloat(bal.granted_balance).toFixed(2)}</div>
+      `;
+    } else if (data.deepseek && data.deepseek.error) {
+      dw.innerHTML = `<h3>🧠 DeepSeek</h3><div class="error">⚠ ${data.deepseek.error}</div>`;
+    }
+
+    // Runware
+    const rw = document.getElementById('runware-widget');
+    if (data.runware && data.runware.balance !== undefined) {
+      const bal = data.runware.balance;
+      const cls = bal > 10 ? 'green' : bal > 1 ? 'yellow' : bal > 0 ? 'orange' : 'red';
+      rw.innerHTML = `
+        <h3>🟣 Runware</h3>
+        <div class="value ${cls}">$${bal.toFixed(2)}</div>
+        <div class="sub">今日 $${data.runware.today_usage.toFixed(4)} (${data.runware.today_requests}次)</div>
+        <div class="sub">总计 $${data.runware.total_usage.toFixed(2)} (${data.runware.total_requests}次)</div>
+      `;
+    } else if (data.runware && data.runware.error) {
+      rw.innerHTML = `<h3>🟣 Runware</h3><div class="error">⚠ ${data.runware.error}</div>`;
+    }
+
+  } catch(e) {
+    document.getElementById('openrouter-widget').innerHTML =
+      `<h3>🌐 OpenRouter</h3><div class="error">⚠ 连接失败</div>`;
+    document.getElementById('deepseek-widget').innerHTML =
+      `<h3>🧠 DeepSeek</h3><div class="error">⚠ 连接失败</div>`;
+  }
+}
+
+// ── 双机实时资源 ──
+async function loadResources() {
+  try {
+    const r = await fetch('/api/resources');
+    const data = await r.json();
+    const ts = new Date(data.ts * 1000);
+
+    // 更新时间戳
+    document.getElementById('res-ts').textContent =
+      `⏱ ${ts.getHours().toString().padStart(2,'0')}:${ts.getMinutes().toString().padStart(2,'0')}:${ts.getSeconds().toString().padStart(2,'0')}`;
+
+    // 更新主机资源
+    ['pixel', 'moris'].forEach(host => {
+      const h = data[host];
+      if (!h || h.error) return;
+
+      const prefix = host === 'pixel' ? 'pixel' : 'moris';
+      const color = host === 'pixel' ? 'var(--accent)' : 'var(--accent2)';
+
+      // Uptime
+      document.getElementById(`${prefix}-uptime`).textContent =
+        `⏫ ${h.uptime} · 负载 ${h.cpu.load ? h.cpu.load.join(' / ') : '--'}`;
+
+      // CPU
+      const cpuPct = h.cpu.percent;
+      document.getElementById(`${prefix}-cpu-bar`).style.width = cpuPct + '%';
+      document.getElementById(`${prefix}-cpu-bar`).className = `bar-fill ${barColor(cpuPct)}`;
+      document.getElementById(`${prefix}-cpu-pct`).textContent = cpuPct.toFixed(1) + '%';
+
+      // Memory
+      const memPct = h.memory.percent;
+      document.getElementById(`${prefix}-mem-bar`).style.width = memPct + '%';
+      document.getElementById(`${prefix}-mem-bar`).className = `bar-fill ${barColor(memPct)}`;
+      document.getElementById(`${prefix}-mem-pct`).textContent = memPct.toFixed(1) + '%';
+      document.getElementById(`${prefix}-mem-bar`).parentElement.parentElement.title =
+        `${formatBytes(h.memory.used)} / ${formatBytes(h.memory.total)}`;
+
+      // Disk
+      const dskPct = h.disk.percent;
+      document.getElementById(`${prefix}-dsk-bar`).style.width = dskPct + '%';
+      document.getElementById(`${prefix}-dsk-bar`).className = `bar-fill ${barColor(dskPct)}`;
+      document.getElementById(`${prefix}-dsk-pct`).textContent = dskPct + '%';
+      document.getElementById(`${prefix}-dsk-bar`).parentElement.parentElement.title =
+        `${formatBytes(h.disk.used)} / ${formatBytes(h.disk.total)}`;
+
+      // Load
+      const loadEl = document.getElementById(`${prefix}-load`);
+      if (h.cpu.load) {
+        loadEl.textContent = `负载 1min: ${h.cpu.load[0].toFixed(2)} · 5min: ${h.cpu.load[1].toFixed(2)} · 15min: ${h.cpu.load[2].toFixed(2)}`;
+      }
+
+      // Containers
+      const ctnEl = document.getElementById(`${prefix}-containers`);
+      if (h.containers && h.containers.length) {
+        ctnEl.innerHTML = h.containers.map(c =>
+          `<span class="container-badge ${c.status !== 'Up' ? 'stop' : ''}">🐳 ${c.name}</span>`
+        ).join('');
+      } else {
+        ctnEl.innerHTML = '<span style="font-size:0.75rem;color:var(--text2)">无容器</span>';
+      }
+    });
+  } catch(e) {
+    console.error('loadResources error:', e);
+  }
+}
+
+// ── 启动 ──
+loadStatus();
+loadResources();
+setInterval(loadStatus, 60000);
+setInterval(loadResources, 15000);
+</script>
+<script>if("serviceWorker"in navigator)navigator.serviceWorker.register("/sw.js")</script>
+</body>
+</html>

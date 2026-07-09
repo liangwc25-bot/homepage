@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📡 万能 API 探测器</title>
+<style>
+  :root {
+    --bg: #0f0f14;
+    --card: #1a1a24;
+    --accent: #7c5cfc;
+    --accent2: #5ce1fc;
+    --green: #4ade80;
+    --yellow: #facc15;
+    --red: #f87171;
+    --text: #e2e8f0;
+    --text2: #94a3b8;
+    --radius: 12px;
+    --orange: #fb923c;
+  }
+  [data-theme="light"] { --bg:#f8f9fc; --card:#fff; --accent:#6c4ce0; --accent2:#3ba5d4; --green:#16a34a; --yellow:#ca8a04; --red:#dc2626; --text:#1e293b; --text2:#64748b; --orange:#ea580c; }
+  [data-theme="light"] .form-card, [data-theme="light"] .result-section { border-color: rgba(0,0,0,0.08) !important; }
+  [data-theme="light"] .rate-item { background: rgba(0,0,0,0.03); }
+  [data-theme="light"] .model-table tr:hover td { background: rgba(0,0,0,0.04); }
+  [data-theme="light"] .log-area { background: rgba(0,0,0,0.03); }
+  [data-theme="light"] input { background: rgba(0,0,0,0.03) !important; border-color: rgba(0,0,0,0.12) !important; }
+  [data-theme="light"] .preset-btn { background: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.12); }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 32px;
+  }
+  .container { max-width: 900px; margin: 0 auto; }
+
+  /* Header */
+  .header { margin-bottom: 32px; }
+  .header h1 {
+    font-size: 1.8rem;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .header p { color: var(--text2); margin-top: 4px; font-size: 0.9rem; }
+  .back-link {
+    display: inline-block;
+    margin-top: 12px;
+    color: var(--accent2);
+    text-decoration: none;
+    font-size: 0.85rem;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+  }
+  .back-link:hover { opacity: 1; }
+
+  /* Form */
+  .form-card {
+    background: var(--card);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+  .form-row { margin-bottom: 16px; }
+  .form-row:last-child { margin-bottom: 0; }
+  .form-row label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--text2);
+    margin-bottom: 6px;
+  }
+  .form-row input {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.04);
+    color: var(--text);
+    font-size: 0.9rem;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-row input:focus { border-color: var(--accent); }
+  .form-row input::placeholder { color: rgba(255,255,255,0.2); }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 24px;
+    border-radius: 8px;
+    border: none;
+    background: linear-gradient(135deg, var(--accent), #6a4fdf);
+    color: white;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(124,92,252,0.3); }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+  .btn-secondary {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .btn-secondary:hover { background: rgba(255,255,255,0.1); }
+
+  /* Quick presets */
+  .presets { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+  .preset-btn {
+    padding: 4px 12px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.03);
+    color: var(--text2);
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .preset-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(124,92,252,0.08);
+  }
+
+  /* Results */
+  .results { display: none; }
+  .results.active { display: block; }
+
+  .result-section {
+    background: var(--card);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .result-section h3 {
+    font-size: 0.9rem;
+    color: var(--text2);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .result-section .loading-dots::after {
+    content: '';
+    animation: dots 1.5s steps(4, end) infinite;
+  }
+  @keyframes dots {
+    0%   { content: ''; }
+    25%  { content: '.'; }
+    50%  { content: '..'; }
+    75%  { content: '...'; }
+    100% { content: ''; }
+  }
+
+  /* Balance widget */
+  .balance-widget {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .balance-value {
+    font-size: 2rem;
+    font-weight: 700;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+  }
+  .balance-value.green { color: var(--green); }
+  .balance-value.yellow { color: var(--yellow); }
+  .balance-value.red { color: var(--red); }
+  .balance-sub { font-size: 0.8rem; color: var(--text2); }
+  .provider-tag {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+  .tag-openrouter { background: rgba(92,225,252,0.15); color: var(--accent2); }
+  .tag-deepseek { background: rgba(74,222,128,0.15); color: var(--green); }
+  .tag-openai { background: rgba(124,92,252,0.15); color: var(--accent); }
+  .tag-proxy { background: rgba(251,146,60,0.15); color: var(--orange); }
+  .tag-unknown { background: rgba(255,255,255,0.08); color: var(--text2); }
+
+  /* Rate limits */
+  .rate-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 10px;
+  }
+  .rate-item {
+    background: rgba(255,255,255,0.03);
+    border-radius: 8px;
+    padding: 12px;
+  }
+  .rate-item .label { font-size: 0.75rem; color: var(--text2); }
+  .rate-item .val {
+    font-size: 1.1rem;
+    font-weight: 600;
+    font-family: 'SF Mono', monospace;
+    margin-top: 2px;
+  }
+
+  /* Model table */
+  .model-controls {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .model-controls input {
+    flex: 1;
+    min-width: 180px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.04);
+    color: var(--text);
+    font-size: 0.82rem;
+    outline: none;
+  }
+  .model-controls input:focus { border-color: var(--accent); }
+  .model-count {
+    font-size: 0.8rem;
+    color: var(--text2);
+    font-family: 'SF Mono', monospace;
+  }
+  .model-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+  }
+  .model-table th {
+    text-align: left;
+    padding: 8px 10px;
+    color: var(--text2);
+    font-weight: 500;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .model-table td {
+    padding: 7px 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 0.8rem;
+  }
+  .model-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .model-table .owner { color: var(--text2); }
+  .model-table .price { color: var(--yellow); font-size: 0.75rem; }
+  .model-scroll { max-height: 400px; overflow-y: auto; }
+  .model-scroll::-webkit-scrollbar { width: 4px; }
+  .model-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+  /* Error */
+  .error-msg {
+    color: var(--red);
+    font-size: 0.85rem;
+    padding: 12px;
+    background: rgba(248,113,113,0.06);
+    border-radius: 8px;
+    border: 1px solid rgba(248,113,113,0.15);
+  }
+  .cors-warning {
+    color: var(--yellow);
+    font-size: 0.8rem;
+    padding: 10px 12px;
+    background: rgba(250,204,21,0.06);
+    border-radius: 8px;
+    border: 1px solid rgba(250,204,21,0.15);
+    margin-top: 8px;
+  }
+
+  /* Copy button */
+  .copy-btn {
+    padding: 3px 8px;
+    border-radius: 4px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.04);
+    color: var(--text2);
+    font-size: 0.7rem;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .copy-btn.copied { border-color: var(--green); color: var(--green); }
+
+  /* Log area */
+  .log-area {
+    background: rgba(0,0,0,0.3);
+    border-radius: 8px;
+    padding: 12px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 0.78rem;
+    color: var(--text2);
+    max-height: 200px;
+    overflow-y: auto;
+    margin-top: 8px;
+    line-height: 1.6;
+  }
+  .log-area .log-ok { color: var(--green); }
+  .log-area .log-fail { color: var(--red); }
+  .log-area .log-info { color: var(--accent2); }
+  .log-area .log-warn { color: var(--yellow); }
+
+  @media (max-width: 640px) {
+    body { padding: 16px; }
+    .balance-value { font-size: 1.5rem; }
+    .rate-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>📡 万能 API 探测器</h1>
+    <p>自动识别 OpenRouter · DeepSeek · OpenAI · 中转站 — 余额 · 限流 · 模型一网打尽</p>
+    <a href="/index.html" class="back-link">← 返回主页</a>
+  </div>
+
+  <!-- Form -->
+  <div class="form-card">
+    <div class="presets">
+      <button class="preset-btn" onclick="fillPreset('https://openrouter.ai/api/v1','OpenRouter')">🌐 OpenRouter</button>
+      <button class="preset-btn" onclick="fillPreset('https://api.deepseek.com','DeepSeek')">🧠 DeepSeek</button>
+      <button class="preset-btn" onclick="fillPreset('https://api.openai.com/v1','OpenAI')">🤖 OpenAI</button>
+      <button class="preset-btn" onclick="fillPreset('https://api.anthropic.com','Anthropic')">🔮 Anthropic</button>
+    </div>
+    <div class="form-row">
+      <label>Base URL</label>
+      <input type="text" id="baseUrl" placeholder="https://openrouter.ai/api/v1" />
+    </div>
+    <div class="form-row">
+      <label>API Key</label>
+      <input type="password" id="apiKey" placeholder="sk-or-v1-... 或 sk-..." />
+    </div>
+    <div class="form-row" style="display:flex;gap:10px;align-items:center">
+      <button class="btn" id="scanBtn" onclick="runScan()">🔍 开始探测</button>
+      <button class="btn btn-secondary" onclick="clearAll()">🗑 清空</button>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div class="results" id="results">
+    <!-- Provider detection -->
+    <div class="result-section" id="providerSection" style="display:none">
+      <h3>🎯 识别结果</h3>
+      <div id="providerInfo"></div>
+    </div>
+
+    <!-- Balance -->
+    <div class="result-section" id="balanceSection" style="display:none">
+      <h3>💰 余额</h3>
+      <div id="balanceInfo"></div>
+    </div>
+
+    <!-- Rate Limits -->
+    <div class="result-section" id="rateSection" style="display:none">
+      <h3>⚡ 速率限制</h3>
+      <div id="rateInfo"></div>
+    </div>
+
+    <!-- Models -->
+    <div class="result-section" id="modelSection" style="display:none">
+      <h3>📋 可用模型</h3>
+      <div id="modelInfo"></div>
+    </div>
+
+    <!-- Debug log -->
+    <div class="result-section">
+      <h3>🔬 探测日志</h3>
+      <div class="log-area" id="logArea"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── State ──
+let allModels = [];
+
+// ── Helpers ──
+function $(id) { return document.getElementById(id); }
+function log(msg, cls = '') {
+  const el = $('logArea');
+  const line = document.createElement('div');
+  if (cls) line.className = cls;
+  line.textContent = msg;
+  el.appendChild(line);
+  el.scrollTop = el.scrollHeight;
+}
+function fillPreset(url) {
+  $('baseUrl').value = url;
+  $('apiKey').focus();
+}
+function clearAll() {
+  $('baseUrl').value = '';
+  $('apiKey').value = '';
+  $('results').classList.remove('active');
+  $('logArea').innerHTML = '';
+  allModels = [];
+  ['providerSection','balanceSection','rateSection','modelSection'].forEach(id => $(id).style.display = 'none');
+}
+
+function detectProvider(url) {
+  const u = url.toLowerCase();
+  if (u.includes('openrouter.ai')) return { name: 'OpenRouter', tag: 'tag-openrouter', type: 'openrouter' };
+  if (u.includes('deepseek.com')) return { name: 'DeepSeek', tag: 'tag-deepseek', type: 'deepseek' };
+  if (u.includes('openai.com')) return { name: 'OpenAI', tag: 'tag-openai', type: 'openai' };
+  if (u.includes('anthropic.com')) return { name: 'Anthropic', tag: 'tag-unknown', type: 'anthropic' };
+  return { name: '中转站 / 自定义', tag: 'tag-proxy', type: 'proxy' };
+}
+
+function normUrl(url) {
+  url = url.trim().replace(/\/+$/, '');
+  // 如果用户没带 /v1 且不是 anthropic，自动尝试
+  return url;
+}
+
+// ── Main scan ──
+async function runScan() {
+  let baseUrl = normUrl($('baseUrl').value);
+  const apiKey = $('apiKey').value.trim();
+
+  if (!baseUrl || !apiKey) {
+    alert('地址和 Key 都不能为空哦～');
+    return;
+  }
+
+  // 确保有协议
+  if (!baseUrl.startsWith('http')) baseUrl = 'https://' + baseUrl;
+
+  const btn = $('scanBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ 探测中...';
+
+  // Reset
+  $('results').classList.add('active');
+  $('logArea').innerHTML = '';
+  allModels = [];
+  ['providerSection','balanceSection','rateSection','modelSection'].forEach(id => $(id).style.display = 'none');
+
+  const provider = detectProvider(baseUrl);
+  log(`📡 目标节点: ${baseUrl}`, 'log-info');
+  log(`🎯 识别为: ${provider.name}`, 'log-info');
+
+  // Show provider tag
+  $('providerSection').style.display = '';
+  $('providerInfo').innerHTML = `
+    <div style="display:flex;align-items:center;gap:10px">
+      <span class="provider-tag ${provider.tag}">${provider.name}</span>
+      <span style="color:var(--text2);font-size:0.82rem;font-family:monospace">${baseUrl}</span>
+    </div>`;
+
+  const headers = { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' };
+
+  // ── Balance ──
+  $('balanceSection').style.display = '';
+  $('balanceInfo').innerHTML = '<span class="loading-dots" style="color:var(--text2)">正在查询余额</span>';
+
+  try {
+    await fetchBalance(baseUrl, headers, provider);
+  } catch (e) {
+    $('balanceInfo').innerHTML = `<div class="error-msg">❌ 余额查询失败: ${e.message}</div>`;
+    log(`❌ 余额查询异常: ${e.message}`, 'log-fail');
+  }
+
+  // ── Rate Limits ──
+  $('rateSection').style.display = '';
+  $('rateInfo').innerHTML = '<span class="loading-dots" style="color:var(--text2)">正在嗅探速率限制</span>';
+
+  try {
+    await fetchRateLimits(baseUrl, headers);
+  } catch (e) {
+    $('rateInfo').innerHTML = `<div class="error-msg">❌ 速率嗅探失败: ${e.message}</div>`;
+    log(`❌ 速率嗅探异常: ${e.message}`, 'log-fail');
+  }
+
+  // ── Models ──
+  $('modelSection').style.display = '';
+  $('modelInfo').innerHTML = '<span class="loading-dots" style="color:var(--text2)">正在拉取模型列表</span>';
+
+  try {
+    await fetchModels(baseUrl, headers, provider);
+  } catch (e) {
+    $('modelInfo').innerHTML = `<div class="error-msg">❌ 模型列表拉取失败: ${e.message}</div>`;
+    log(`❌ 模型列表异常: ${e.message}`, 'log-fail');
+  }
+
+  btn.disabled = false;
+  btn.textContent = '🔍 开始探测';
+  log('✅ 探测完成', 'log-ok');
+}
+
+// ── Balance fetchers ──
+async function fetchBalance(baseUrl, headers, provider) {
+  const b = $('balanceInfo');
+
+  // Strategy A: OpenRouter
+  // API returns { data: { total_credits, total_usage } }
+  // remaining = total_credits - total_usage
+  if (provider.type === 'openrouter') {
+    log('🔗 尝试 OpenRouter /credits ...', 'log-info');
+    try {
+      const r = await fetch('https://openrouter.ai/api/v1/credits', { headers });
+      if (r.ok) {
+        const json = await r.json();
+        const data = json.data || json;
+        const total = parseFloat(data.total_credits) || 0;
+        const usage = parseFloat(data.total_usage) || 0;
+        const remaining = total - usage;
+        const cls = remaining > 5 ? 'green' : remaining > 1 ? 'yellow' : 'red';
+        b.innerHTML = `
+          <div class="balance-widget">
+            <span class="balance-value ${cls}">$${remaining.toFixed(2)}</span>
+            <span class="balance-sub">剩余</span>
+          </div>
+          <div class="balance-sub" style="margin-top:6px">总额 $${total.toFixed(2)} · 已用 $${usage.toFixed(2)}</div>`;
+        log(`✅ OpenRouter: 剩余 $${remaining.toFixed(2)} (总额 $${total} - 已用 $${usage})`, 'log-ok');
+        return;
+      }
+    } catch(e) { log(`⚠ OpenRouter /credits 失败: ${e.message}`, 'log-warn'); }
+  }
+
+  // Strategy B: DeepSeek
+  if (provider.type === 'deepseek') {
+    log('🔗 尝试 DeepSeek /user/balance ...', 'log-info');
+    try {
+      const r = await fetch(`${baseUrl}/user/balance`, { headers });
+      if (r.ok) {
+        const data = await r.json();
+        if (data.is_available !== false && data.balance_infos) {
+          const info = data.balance_infos[0] || {};
+          const total = parseFloat(info.total_balance || 0);
+          const topped = parseFloat(info.topped_up_balance || 0);
+          const granted = parseFloat(info.granted_balance || 0);
+          const cls = total > 2 ? 'green' : total > 0.5 ? 'yellow' : 'red';
+          const currency = info.currency || 'CNY';
+          b.innerHTML = `
+            <div class="balance-widget">
+              <span class="balance-value ${cls}">¥${total.toFixed(4)}</span>
+              <span class="balance-sub">${currency}</span>
+            </div>
+            <div class="balance-sub" style="margin-top:6px">已充值 ¥${topped.toFixed(2)} · 赠送 ¥${granted.toFixed(2)}</div>`;
+          log(`✅ DeepSeek 余额: ¥${total.toFixed(4)} ${currency}`, 'log-ok');
+          return;
+        }
+      }
+    } catch(e) { log(`⚠ DeepSeek /user/balance 失败: ${e.message}`, 'log-warn'); }
+  }
+
+  // Strategy C: OpenAI billing
+  if (provider.type === 'openai') {
+    log('🔗 尝试 OpenAI /billing/subscription ...', 'log-info');
+    try {
+      const r = await fetch('https://api.openai.com/dashboard/billing/subscription', { headers });
+      if (r.ok) {
+        const data = await r.json();
+        const total = data.hard_limit_usd || 0;
+        const cls = total > 5 ? 'green' : total > 1 ? 'yellow' : 'red';
+        b.innerHTML = `
+          <div class="balance-widget">
+            <span class="balance-value ${cls}">$${total.toFixed(2)}</span>
+            <span class="balance-sub">额度上限</span>
+          </div>`;
+        log(`✅ OpenAI 额度上限: $${total.toFixed(2)}`, 'log-ok');
+        return;
+      }
+    } catch(e) { log(`⚠ OpenAI billing 失败: ${e.message}`, 'log-warn'); }
+  }
+
+  // Strategy D: Generic OneAPI / NewAPI / proxy panels
+  log('🔗 尝试通用中转站端点 ...', 'log-info');
+  const dashEndpoints = [
+    '/v1/user/dashboard',
+    '/dashboard/billing/subscription',
+    '/v1/dashboard/billing/usage',
+    '/api/user/self',
+    '/api/user/dashboard',
+  ];
+  for (const ep of dashEndpoints) {
+    try {
+      const testBase = (ep.startsWith('/dashboard') || ep.startsWith('/api'))
+        ? baseUrl.replace(/\/v1\/?$/, '')
+        : baseUrl;
+      const r = await fetch(`${testBase}${ep}`, { headers });
+      if (r.ok) {
+        const data = await r.json();
+        // Try various key patterns
+        const total = data.total_calculated ?? data.total_credits ?? data.hard_limit_usd
+                   ?? data.quota ?? data.total_quota ?? null;
+        const remain = data.remain_credits ?? data.available_balance ?? data.remaining_quota
+                    ?? data.balance ?? null;
+        if (total !== null || remain !== null) {
+          const remainStr = remain !== null ? `剩余: ${remain}` : '';
+          const totalStr = total !== null ? `总额: ${total}` : '';
+          const cls = (typeof remain === 'number' && remain < 1) ? 'red' : 'green';
+          b.innerHTML = `
+            <div class="balance-widget">
+              <span class="balance-value ${cls}">${remain ?? total ?? '--'}</span>
+              <span class="balance-sub">${remainStr}${remain && total ? ' | ' : ''}${totalStr}</span>
+            </div>
+            <div class="balance-sub" style="margin-top:6px">端点: ${ep}</div>`;
+          log(`✅ 中转站余额 (${ep}): ${remainStr} | ${totalStr}`, 'log-ok');
+          return;
+        }
+      }
+    } catch(e) { /* continue */ }
+  }
+
+  // No balance found
+  b.innerHTML = '<div style="color:var(--text2);font-size:0.85rem">该厂商未开放标准余额查询接口</div>';
+  log('⚠ 未找到可用的余额端点', 'log-warn');
+}
+
+// ── Rate Limits ──
+async function fetchRateLimits(baseUrl, headers) {
+  const r = $('rateInfo');
+  log('🔗 发送轻量探测包获取限流头 ...', 'log-info');
+
+  try {
+    const payload = { model: 'probe-v1', messages: [{ role: 'user', content: '' }], max_tokens: 1 };
+    const res = await fetch(`${baseUrl}/chat/completions`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(payload),
+    });
+
+    // Extract rate limit headers
+    const h = {};
+    for (const [k, v] of res.headers.entries()) {
+      if (k.includes('ratelimit') || k.includes('rate-limit') || k.includes('x-rpm') || k.includes('x-tpm')) {
+        h[k] = v;
+      }
+    }
+
+    const rpm = h['x-ratelimit-limit-requests'] || h['x-ratelimit-limit-rpm'] || h['ratelimit-limit'] || null;
+    const tpm = h['x-ratelimit-limit-tokens'] || h['x-ratelimit-limit-tpm'] || null;
+    const rem = h['x-ratelimit-remaining-requests'] || h['ratelimit-remaining'] || null;
+    const reset = h['x-ratelimit-reset-requests'] || h['ratelimit-reset'] || null;
+
+    if (rpm || tpm || rem) {
+      let html = '<div class="rate-grid">';
+      if (rpm) html += `<div class="rate-item"><div class="label">请求频率 (RPM)</div><div class="val" style="color:var(--accent2)">${rpm}</div></div>`;
+      if (tpm) html += `<div class="rate-item"><div class="label">Token 吞吐 (TPM)</div><div class="val" style="color:var(--accent)">${tpm}</div></div>`;
+      if (rem) html += `<div class="rate-item"><div class="label">剩余请求</div><div class="val" style="color:var(--green)">${rem}</div></div>`;
+      if (reset) html += `<div class="rate-item"><div class="label">重置时间</div><div class="val" style="color:var(--yellow)">${reset}</div></div>`;
+      html += '</div>';
+      r.innerHTML = html;
+      log(`✅ 限流: RPM=${rpm || '-'} TPM=${tpm || '-'} 剩余=${rem || '-'}`, 'log-ok');
+    } else {
+      // Check all headers for anything useful
+      const allHeaders = {};
+      for (const [k, v] of res.headers.entries()) {
+        if (k.startsWith('x-') || k.startsWith('cf-')) allHeaders[k] = v;
+      }
+      r.innerHTML = `
+        <div style="color:var(--text2);font-size:0.85rem">该端点未返回标准限流头</div>
+        <details style="margin-top:8px">
+          <summary style="cursor:pointer;color:var(--text2);font-size:0.8rem">查看响应头 (${Object.keys(allHeaders).length})</summary>
+          <div class="log-area" style="margin-top:6px;max-height:150px">${Object.entries(allHeaders).map(([k,v]) => `${k}: ${v}`).join('\n')}</div>
+        </details>`;
+      log('⚠ 未检测到标准限流头，已列出响应头供参考', 'log-warn');
+    }
+  } catch (e) {
+    // CORS or network error
+    r.innerHTML = `
+      <div class="error-msg">嗅探失败 (可能 CORS 限制)</div>
+      <div class="cors-warning">💡 浏览器 CORS 限制：部分 API 不允许前端直接请求。可尝试用 <code>curl -I</code> 在终端手动检查响应头。</div>`;
+    log(`❌ 速率嗅探失败: ${e.message}`, 'log-fail');
+  }
+}
+
+// ── Models ──
+async function fetchModels(baseUrl, headers, provider) {
+  const m = $('modelInfo');
+  log('🔗 拉取模型列表 ...', 'log-info');
+
+  // Anthropic doesn't have /models endpoint
+  if (provider.type === 'anthropic') {
+    m.innerHTML = `
+      <div style="color:var(--text2);font-size:0.85rem">
+        Anthropic 不提供模型列表端点。已知模型：<br>
+        <code style="color:var(--accent2)">claude-sonnet-4-20250514</code>,
+        <code style="color:var(--accent2)">claude-opus-4-20250514</code>,
+        <code style="color:var(--accent2)">claude-haiku-35-20241022</code>
+      </div>`;
+    log('ℹ Anthropic 无 /models 端点，列出已知模型', 'log-info');
+    return;
+  }
+
+  try {
+    const res = await fetch(`${baseUrl}/models`, { headers });
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status}`);
+    }
+    const data = await res.json();
+    allModels = data.data || data.models || data || [];
+
+    if (!Array.isArray(allModels) || allModels.length === 0) {
+      m.innerHTML = '<div style="color:var(--text2);font-size:0.85rem">未返回模型数据</div>';
+      log('⚠ 模型列表为空', 'log-warn');
+      return;
+    }
+
+    log(`✅ 获取到 ${allModels.length} 个模型`, 'log-ok');
+    renderModels();
+  } catch (e) {
+    m.innerHTML = `<div class="error-msg">模型列表拉取失败: ${e.message}</div>
+      <div class="cors-warning">💡 可能是 CORS 限制或该端点需要特殊鉴权。</div>`;
+    log(`❌ 模型列表失败: ${e.message}`, 'log-fail');
+  }
+}
+
+function renderModels() {
+  const m = $('modelInfo');
+  const filter = ($('modelFilter')?.value || '').toLowerCase();
+
+  const filtered = allModels.filter(mod => {
+    if (!filter) return true;
+    const id = (mod.id || '').toLowerCase();
+    const owner = (mod.owned_by || '').toLowerCase();
+    return id.includes(filter) || owner.includes(filter);
+  });
+
+  let html = `
+    <div class="model-controls">
+      <input type="text" id="modelFilter" placeholder="🔍 搜索模型 ID / Owner..." oninput="renderModels()" value="${filter}" />
+      <span class="model-count">${filtered.length} / ${allModels.length}</span>
+      <button class="copy-btn" onclick="copyModelIds()">📋 复制 ID</button>
+    </div>
+    <div class="model-scroll">
+      <table class="model-table">
+        <thead><tr><th>Model ID</th><th>Owner</th></tr></thead>
+        <tbody>`;
+
+  for (const mod of filtered) {
+    const id = mod.id || '未知';
+    const owner = mod.owned_by || '—';
+    // Some providers include pricing
+    const prompt_price = mod.pricing?.prompt || mod.pricing?.input || null;
+    const priceStr = prompt_price ? `<span class="price">$${prompt_price}/tok</span>` : '';
+    html += `<tr><td>${id}</td><td class="owner">${owner}</td></tr>`;
+  }
+
+  html += '</tbody></table></div>';
+  m.innerHTML = html;
+}
+
+function copyModelIds() {
+  const ids = allModels.map(m => m.id).join('\n');
+  navigator.clipboard.writeText(ids).then(() => {
+    const btn = document.querySelector('.copy-btn');
+    btn.textContent = '✅ 已复制';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '📋 复制 ID'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
+
+<button id="theme-toggle" style="position:fixed;bottom:20px;right:20px;width:40px;height:40px;border-radius:50%;border:1px solid rgba(128,128,128,0.3);background:var(--card);color:var(--text);font-size:1.2rem;cursor:pointer;z-index:9999;display:flex;align-items:center;justify-content:center;transition:.2s;box-shadow:0 2px 8px rgba(0,0,0,0.15)" onclick="toggleTheme()" title="切换主题">☀️</button>
+
+<script>
+(function(){
+  const saved = localStorage.getItem('theme');
+  if (saved === 'light') document.documentElement.setAttribute('data-theme', 'light');
+  window.toggleTheme = function(){
+    const current = document.documentElement.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+    const btn = document.getElementById('theme-toggle');
+    if (btn) btn.textContent = next === 'dark' ? '☀️' : '🌙';
+  };
+  setTimeout(function(){
+    const btn = document.getElementById('theme-toggle');
+    const theme = document.documentElement.getAttribute('data-theme');
+    if (btn) btn.textContent = theme === 'dark' ? '☀️' : '🌙';
+  }, 0);
+})();
+</script>
+</body>
+</html>

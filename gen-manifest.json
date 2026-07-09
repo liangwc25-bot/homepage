@@ -1,0 +1,13 @@
+{
+  "name": "生图",
+  "short_name": "生图",
+  "start_url": "/gen.html",
+  "display": "standalone",
+  "background_color": "#0f0f14",
+  "theme_color": "#7c5cfc",
+  "description": "AI 图片生成",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
