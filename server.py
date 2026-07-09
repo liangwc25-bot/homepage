@@ -24,6 +24,7 @@ DEEPSEEK_KEY = _deepseek_key or os.environ.get("DEEPSEEK_API_KEY", "")
 OPENROUTER_KEY = _openrouter_key or os.environ.get("OPENROUTER_API_KEY", "")
 RUNWARE_KEY = _runware_key or os.environ.get("RUNWARE_API_KEY", "")
 STATIC_DIR = Path(__file__).parent
+GEN_DIR = Path(__file__).parent.parent / "gen-pipeline"  # gen_web.py + gen_lib
 MORIS_SSH = ["ssh", "-p", "37980", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8",
              "root@100.73.239.42"]
 
@@ -114,6 +115,19 @@ class HomepageHandler(SimpleHTTPRequestHandler):
             return self._handle_output_image()
         if self._parsed_path.startswith("/api/job"):
             return self._handle_job()
+# Serve gen-pipeline files
+        _gen_files = ["/gen.html", "/gen-manifest.json"]
+        if self._parsed_path in _gen_files:
+            fp = GEN_DIR / self._parsed_path.lstrip("/")
+            if fp.exists():
+                self.send_response(200)
+                ct = "text/html" if fp.suffix == ".html" else "application/json"
+                self.send_header("Content-Type", ct)
+                self.end_headers()
+                self.wfile.write(fp.read_bytes())
+            else:
+                self.send_error(404)
+            return
         self.directory = str(STATIC_DIR)
         return super().do_GET()
 
@@ -216,7 +230,7 @@ class HomepageHandler(SimpleHTTPRequestHandler):
         from urllib.parse import urlparse, parse_qs
         qs = parse_qs(urlparse(self.path).query)
         model = qs.get("model", [None])[0]
-        script_path = STATIC_DIR / "gen_web.py"
+        script_path = GEN_DIR / "gen_web.py"
         try:
             r = subprocess.run(
                 ["python3", str(script_path)],
@@ -230,7 +244,7 @@ class HomepageHandler(SimpleHTTPRequestHandler):
 
     def _handle_list_models(self):
         """List available Runware models."""
-        script_path = STATIC_DIR / "gen_web.py"
+        script_path = GEN_DIR / "gen_web.py"
         try:
             r = subprocess.run(
                 ["python3", str(script_path)],
@@ -279,7 +293,7 @@ class HomepageHandler(SimpleHTTPRequestHandler):
 
         data["action"] = "generate"
         job_id = uuid.uuid4().hex[:8]
-        script_path = STATIC_DIR / "gen_web.py"
+        script_path = GEN_DIR / "gen_web.py"
 
         proc = subprocess.Popen(
             ["python3", str(script_path)],
