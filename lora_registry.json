@@ -1,0 +1,2984 @@
+{
+  "version": "1.5",
+  "updated": "2026-07-09",
+  "loras": [
+    {
+      "id": "nsfw-master",
+      "runware_air_id": "civitai:667086@746602",
+      "name": "NSFW MASTER (FLUX)",
+      "file": "",
+      "url": "https://civitai.com/api/download/models/746602",
+      "trigger_words": [],
+      "tags": [
+        "nsfw",
+        "flux",
+        "master",
+        "runware-verified"
+      ],
+      "default_scale": 1.0,
+      "scale_range": [
+        0.8,
+        1.2
+      ],
+      "description": "NSFW MASTER by Shopon_Skp - 592MB FLUX NSFW LoRA. Runware Verified ✅. Scale >= 1.0 needed for visible effect.",
+      "base_model": "flux-dev",
+      "category": "character_style",
+      "nsfw": true,
+      "incompatible_with": [
+        "rie-asian-face-flux",
+        "asian-girls-face-v2"
+      ],
+      "notes": "Runware: scale 0.8 too weak, need 1.0+. 2026-07-05: 592MB file size overpowers ALL FLUX style LoRAs (not just ones in incompatible_with). Even at 0.2 scale, style LoRAs like sanguosha-style get pulled toward photorealism. Rule: disable NSFW MASTER when using style LoRAs, use prompt-only NSFW instead."
+    },
+    {
+      "id": "asian-girls-face-v2",
+      "runware_air_id": "civitai:836153@1166031",
+      "name": "Realistic Asian girls face Flux v2.0",
+      "file": "",
+      "url": "https://civitai.com/models/836153/flux-or-realistic-asian-girls-face-flux",
+      "trigger_words": [
+        "asian young woman",
+        "japanese young woman"
+      ],
+      "tags": [
+        "asian",
+        "face",
+        "flux",
+        "runware-verified",
+        "character"
+      ],
+      "default_scale": 0.5,
+      "scale_range": [
+        0.3,
+        0.7
+      ],
+      "description": "Realistic Asian girls face Flux v2.0 - 292MB FLUX. Works on Runware AIR.",
+      "base_model": "flux-dev",
+      "category": "character_style",
+      "nsfw": false,
+      "incompatible_with": [
+        "nsfw-master"
+      ],
+      "notes": "Runware verified ✅. Same category as NSFW MASTER - stacking dilutes both."
+    },
+    {
+      "id": "eerie-atmosphere-flux",
+      "runware_air_id": "civitai:335970@763526",
+      "name": "Eerie Atmosphere [FLUX+SDXL]",
+      "file": "",
+      "url": "https://civitai.com/models/335970/eerie-atmosphere-fluxsdxl",
+      "trigger_words": [
+        "eerie",
+        "horror",
+        "dark",
+        "creepy"
+      ],
+      "tags": [
+        "atmosphere",
+        "horror",
+        "eerie",
+        "flux",
+        "runware-verified"
+      ],
+      "default_scale": 0.7,
+      "scale_range": [
+        0.4,
+        1.0
+      ],
+      "description": "18MB FLUX LoRA for eerie atmosphere. Works on Runware AIR. Good for ambient uncanny without monster elements.",
+      "base_model": "flux-dev",
+      "category": "environment",
+      "nsfw": false,
+      "incompatible_with": [],
+      "notes": "Runware verified ✅. Can stack with NSFW MASTER (diff category) for combined NSFW + atmosphere."
+    },
+    {
+      "id": "eerie-darkness-pony",
+      "runware_air_id": "civitai:941748@1054318",
+      "name": "Eerie Darkness style [PonyXL]",
+      "file": "",
+      "url": "https://civitai.com/models/941748/eerie-darkness-style-ponyxl",
+      "trigger_words": [
+        "eerie",
+        "dark",
+        "horror"
+      ],
+      "tags": [
+        "pony",
+        "horror",
+        "eerie",
+        "runware-verified"
+      ],
+      "default_scale": 0.7,
+      "scale_range": [
+        0.5,
+        1.0
+      ],
+      "description": "99.7MB Pony LoRA for dark eerie images. Adds black void eyes. ⚠️ At high scales adds wounds/horror elements.",
+      "base_model": "pony",
+      "category": "style",
+      "nsfw": false,
+      "incompatible_with": [],
+      "notes": "Runware verified ✅. Void eyes effect good but adds monster/horror elements at scale >= 0.8."
+    },
+    {
+      "id": "cyberpunk-landscape-pony",
+      "runware_air_id": "civitai:528341@587049",
+      "name": "Cyberpunk Landscape Pony XL",
+      "file": "",
+      "url": "https://civitai.com/models/528341/cyberpunk-landscape-pony-xl",
+      "trigger_words": [
+        "cyberpunk",
+        "neon",
+        "city"
+      ],
+      "tags": [
+        "pony",
+        "cyberpunk",
+        "environment",
+        "runware-verified"
+      ],
+      "default_scale": 0.6,
+      "scale_range": [
+        0.3,
+        0.9
+      ],
+      "description": "162.7MB Pony LoRA for cyberpunk cityscapes.",
+      "base_model": "pony",
+      "category": "environment",
+      "nsfw": false,
+      "incompatible_with": [],
+      "notes": "Runware verified ✅. Stack with Eerie Darkness for cyberpunk horror."
+    },
+    {
+      "id": "rie-asian-face-flux",
+      "runware_air_id": "civitai:644945@736440",
+      "name": "Rie Asian Face Flux LoRA",
+      "file": "",
+      "url": "https://civitai.com/models/644945/rie-asian-face-flux-lora",
+      "trigger_words": [
+        "girl",
+        "women"
+      ],
+      "tags": [
+        "asian",
+        "face",
+        "flux"
+      ],
+      "default_scale": 0.5,
+      "scale_range": [
+        0.4,
+        0.7
+      ],
+      "description": "164MB FLUX Asian face LoRA. ❌ NOT recognized by Runware AIR.",
+      "base_model": "flux-dev",
+      "category": "character_style",
+      "nsfw": false,
+      "incompatible_with": [
+        "nsfw-master"
+      ],
+      "notes": "Runware: invalidLoraModel. Same category as NSFW MASTER."
+    },
+    {
+      "id": "tomie-uncanny",
+      "name": "Tomie Uncanny Beauty",
+      "url": "",
+      "trigger_words": [
+        "tomie",
+        "uncanny beauty",
+        "dark hair bob",
+        "dangerous smile",
+        "black bob haircut"
+      ],
+      "tags": [
+        "portrait",
+        "uncanny",
+        "dark",
+        "japanese horror",
+        "tomie"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "description": "Tomie-style uncanny beauty. ⚠️ FLUX cannot do true Tomie eyes (outputs 'foreigner drawing Japanese'). Use Pony base instead.",
+      "base_model": "flux-dev",
+      "category": "character_style",
+      "nsfw": false,
+      "incompatible_with": [
+        "cute-kawaii-style"
+      ],
+      "notes": "2026-06-24: FLUX不适合Tomie。Pony base better but needs NSFW LoRA."
+    },
+    {
+      "id": "wet-silk-fabric",
+      "name": "Wet Silk Fabric",
+      "url": "",
+      "trigger_words": [
+        "wet silk",
+        "translucent fabric",
+        "see-through fabric",
+        "wet dress",
+        "wet clothing"
+      ],
+      "tags": [
+        "fabric",
+        "wet",
+        "translucent",
+        "silk",
+        "texture"
+      ],
+      "default_scale": 0.7,
+      "scale_range": [
+        0.3,
+        1.0
+      ],
+      "description": "Wet/semi-transparent silk fabric texture.",
+      "base_model": "flux-dev",
+      "category": "texture",
+      "nsfw": true,
+      "incompatible_with": [],
+      "notes": "Scale sweet spot: 0.5-0.7."
+    },
+    {
+      "id": "neon-cyberpunk",
+      "name": "Neon Cyberpunk City",
+      "url": "",
+      "trigger_words": [
+        "neon city",
+        "cyberpunk",
+        "neon lights",
+        "future city"
+      ],
+      "tags": [
+        "cyberpunk",
+        "neon",
+        "city",
+        "night",
+        "sci-fi",
+        "urban",
+        "dark"
+      ],
+      "default_scale": 0.75,
+      "scale_range": [
+        0.3,
+        1.2
+      ],
+      "description": "Neon-lit cyberpunk cityscape for environment/background.",
+      "base_model": "flux-dev",
+      "category": "environment",
+      "nsfw": false,
+      "incompatible_with": [],
+      "notes": "Scale 0.5-0.7 as background, 1.0+ for dominant style."
+    },
+    {
+      "id": "dark-noir-lighting",
+      "name": "Dark Noir Lighting",
+      "url": "",
+      "trigger_words": [
+        "noir lighting",
+        "dark noir",
+        "film noir",
+        "chiaroscuro",
+        "dramatic shadows"
+      ],
+      "tags": [
+        "lighting",
+        "noir",
+        "dark",
+        "shadows",
+        "dramatic",
+        "moody",
+        "cinematic"
+      ],
+      "default_scale": 0.6,
+      "scale_range": [
+        0.2,
+        1.0
+      ],
+      "description": "Film noir dramatic lighting for moody atmosphere.",
+      "base_model": "flux-dev",
+      "category": "lighting",
+      "nsfw": false,
+      "incompatible_with": [],
+      "notes": "Keep scale 0.3-0.6 when stacking with other LoRAs."
+    },
+    {
+      "id": "jianlai-he-xiaoliang",
+      "runware_air_id": "liangwc:lora10@1425098",
+      "name": "剑来贺小凉 (lora10)",
+      "file": "",
+      "url": "https://huggingface.co/liangwc25/lora-lora10/resolve/main/model.safetensors",
+      "trigger_words": [],
+      "tags": [
+        "cartoon",
+        "character",
+        "flux",
+        "guoman",
+        "runware-verified"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "description": "剑来贺小凉 — Flux.1 D character LoRA, cartoon/anime style. Uploaded via HF relay. Runware AIR verified ✅.",
+      "base_model": "flux-dev",
+      "category": "character_style",
+      "nsfw": false,
+      "incompatible_with": [],
+      "notes": "2026-07-01: uploaded to Runware via liangwc25/lora-lora10 on HF. 293MB safetensors."
+    },
+    {
+      "id": "giantess-v2",
+      "runware_air_id": "liangwc:giantess-v2@2386394",
+      "name": "BuildingSizedGiantess v2",
+      "file": "",
+      "url": "https://civitai.com/models/2386394",
+      "trigger_words": [],
+      "tags": [
+        "giantess",
+        "illustrious",
+        "runware-verified"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "description": "Building Sized Giantess v2 — Illustrious base. Runware AIR verified ✅.",
+      "base_model": "illustrious",
+      "category": "character_style",
+      "nsfw": true,
+      "incompatible_with": [],
+      "notes": "2026-07-01: uploaded to Runware. Illustrious base model."
+    },
+    {
+      "id": "lora3-3d-campus-girl",
+      "runware_air_id": "liangwc:lora3@1711467",
+      "name": "3D campus girl (lora3)",
+      "file": "",
+      "url": "https://civitai.com/models/1711467",
+      "trigger_words": [],
+      "tags": [
+        "3d",
+        "campus",
+        "girl",
+        "flux",
+        "runware-verified"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "description": "3D semi-realistic style campus girl — Flux.1 D base. Runware AIR verified ✅.",
+      "base_model": "flux-dev",
+      "category": "character_style",
+      "nsfw": false,
+      "incompatible_with": [],
+      "notes": "2026-07-01: uploaded to Runware."
+    },
+    {
+      "id": "lora4-gts-gigagts",
+      "runware_air_id": "liangwc:lora4@813828",
+      "name": "GTS - GigaGTS (lora4)",
+      "file": "",
+      "url": "https://civitai.com/models/813828",
+      "trigger_words": [],
+      "tags": [
+        "giantess",
+        "gts",
+        "flux",
+        "runware-verified"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "description": "Giantess (GTS - GigaGTS) — Flux.1 D base. Runware AIR verified ✅.",
+      "base_model": "flux-dev",
+      "category": "character_style",
+      "nsfw": true,
+      "incompatible_with": [],
+      "notes": "2026-07-01: uploaded to Runware."
+    },
+    {
+      "id": "lora5-shao-siyuan",
+      "runware_air_id": "liangwc:lora5@1645600",
+      "name": "少司缘ssy (lora5)",
+      "file": "",
+      "url": "https://civitai.com/models/1645600",
+      "trigger_words": [],
+      "tags": [
+        "character",
+        "illustrious",
+        "runware-verified",
+        "王者荣耀"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "description": "少司缘 — 王者荣耀 character, Illustrious base. Runware AIR verified ✅.",
+      "base_model": "illustrious",
+      "category": "character_style",
+      "nsfw": false,
+      "incompatible_with": [],
+      "notes": "2026-07-01: uploaded to Runware."
+    },
+    {
+      "id": "lora6-cof-cum-on-flux",
+      "runware_air_id": "liangwc:lora6@1576616",
+      "name": "COF Cum On Flux 18+ (lora6)",
+      "file": "",
+      "url": "https://civitai.com/models/1576616",
+      "trigger_words": [],
+      "tags": [
+        "nsfw",
+        "flux",
+        "runware-verified"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "description": "COF Cum On Flux 18+ — Flux.1 D base. Runware AIR verified ✅.",
+      "base_model": "flux-dev",
+      "category": "character_style",
+      "nsfw": true,
+      "incompatible_with": [],
+      "notes": "2026-07-01: uploaded to Runware."
+    },
+    {
+      "id": "lora7-girl-x-giant",
+      "runware_air_id": "liangwc:lora7@1169441",
+      "name": "Girl x Giant XL 18+ (lora7)",
+      "file": "",
+      "url": "https://civitai.com/models/1169441",
+      "trigger_words": [],
+      "tags": [
+        "giantess",
+        "nsfw",
+        "pony",
+        "runware-verified"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "description": "Girl x Giant XL 18+ — Pony base. Runware AIR verified ✅.",
+      "base_model": "pony",
+      "category": "character_style",
+      "nsfw": true,
+      "incompatible_with": [],
+      "notes": "2026-07-01: uploaded to Runware."
+    },
+    {
+      "id": "lora8-oppai-large-breasts",
+      "runware_air_id": "liangwc:lora8@623811",
+      "name": "Oppai Large Breasts 18+ (lora8)",
+      "file": "",
+      "url": "https://civitai.com/models/623811",
+      "trigger_words": [],
+      "tags": [
+        "nsfw",
+        "pony",
+        "runware-verified"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "description": "Oppai / Large breasts slim body 18+ — Pony base. Runware AIR verified ✅.",
+      "base_model": "pony",
+      "category": "character_style",
+      "nsfw": true,
+      "incompatible_with": [],
+      "notes": "2026-07-01: uploaded to Runware."
+    },
+    {
+      "id": "lora9-futanari",
+      "runware_air_id": "liangwc:lora9@564643",
+      "name": "Futanari 18+ (lora9)",
+      "file": "",
+      "url": "https://civitai.com/models/564643",
+      "trigger_words": [],
+      "tags": [
+        "nsfw",
+        "pony",
+        "futanari",
+        "runware-verified"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "description": "Large Futanari Penis 18+ — Pony base. Runware AIR verified ✅.",
+      "base_model": "pony",
+      "category": "character_style",
+      "nsfw": true,
+      "incompatible_with": [],
+      "notes": "2026-07-01: uploaded to Runware."
+    },
+    {
+      "id": "breast-size-slider",
+      "runware_air_id": "liangwc:breast-size-slider@1835318",
+      "name": "Breast Size Slider",
+      "url": "https://civitai.com/models/481016",
+      "tags": [
+        "illustrious",
+        "character"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character_style",
+      "nsfw": true
+    },
+    {
+      "id": "ohogao",
+      "runware_air_id": "liangwc:ohogao@1192192",
+      "name": "Ohogao SDXL",
+      "url": "https://civitai.com/models/322121",
+      "tags": [
+        "illustrious",
+        "nsfw",
+        "expression"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character_style",
+      "nsfw": true
+    },
+    {
+      "id": "extreme-insertion-ill",
+      "runware_air_id": "liangwc:extreme-insertion-ill@1208756",
+      "name": "Extreme Insertion (Illustrious)",
+      "url": "https://civitai.com/models/444807",
+      "tags": [
+        "illustrious",
+        "nsfw"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character_style",
+      "nsfw": true
+    },
+    {
+      "id": "realistic-filter",
+      "runware_air_id": "liangwc:realistic-filter@1124771",
+      "name": "Realistic Filter [IL]",
+      "url": "https://civitai.com/models/1003513",
+      "tags": [
+        "illustrious",
+        "style"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "style",
+      "nsfw": false
+    },
+    {
+      "id": "fairy-fleshlight",
+      "runware_air_id": "liangwc:fairy-fleshlight@2042152",
+      "name": "Fairy Fleshlight",
+      "url": "https://civitai.com/models/1804503",
+      "tags": [
+        "illustrious",
+        "nsfw"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character_style",
+      "nsfw": true
+    },
+    {
+      "id": "orgasm-pose",
+      "runware_air_id": "liangwc:orgasm-pose@1788452",
+      "name": "Pleasured Orgasm Pose",
+      "url": "https://civitai.com/models/721065",
+      "tags": [
+        "illustrious",
+        "nsfw",
+        "pose"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character_style",
+      "nsfw": true
+    },
+    {
+      "id": "freaky-dicks",
+      "runware_air_id": "liangwc:freaky-dicks@2267798",
+      "name": "Freaky Dicks",
+      "url": "https://civitai.com/models/1833177",
+      "tags": [
+        "illustrious",
+        "nsfw"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character_style",
+      "nsfw": true
+    },
+    {
+      "id": "bukkake",
+      "runware_air_id": "liangwc:bukkake@595414",
+      "name": "Bukkake / Excessive Cum",
+      "url": "https://civitai.com/models/109745",
+      "tags": [
+        "pony",
+        "nsfw"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "pony",
+      "category": "character_style",
+      "nsfw": true
+    },
+    {
+      "id": "extreme-insertion-pony",
+      "runware_air_id": "liangwc:extreme-insertion-pony@520278",
+      "name": "Extreme Insertion (Pony)",
+      "url": "https://civitai.com/models/444807",
+      "tags": [
+        "pony",
+        "nsfw"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "pony",
+      "category": "character_style",
+      "nsfw": true
+    },
+    {
+      "id": "geekpower-styles",
+      "runware_air_id": "liangwc:geekpower-styles@354128",
+      "name": "Geekpower AI Styles",
+      "url": "https://civitai.com/models/315703",
+      "tags": [
+        "pony",
+        "style"
+      ],
+      "default_scale": 0.6,
+      "scale_range": [
+        0.3,
+        0.9
+      ],
+      "base_model": "pony",
+      "category": "style",
+      "nsfw": false
+    },
+    {
+      "id": "gothic-retro-anime",
+      "runware_air_id": "liangwc:gothic-retro-anime@501154",
+      "name": "Gothic Retro Anime",
+      "url": "https://civitai.com/models/888235",
+      "tags": [
+        "pony",
+        "style",
+        "anime"
+      ],
+      "default_scale": 0.6,
+      "scale_range": [
+        0.3,
+        0.9
+      ],
+      "base_model": "pony",
+      "category": "style",
+      "nsfw": false,
+      "notes": "鹿鹿常用。Runware AIR verified ✅"
+    },
+    {
+      "id": "gufeng",
+      "runware_air_id": "liangwc:gufeng@954662",
+      "name": "Gufeng / 古风 / 国风",
+      "url": "https://civitai.com/models/853112",
+      "tags": [
+        "pony",
+        "style",
+        "chinese"
+      ],
+      "default_scale": 0.6,
+      "scale_range": [
+        0.3,
+        0.9
+      ],
+      "base_model": "pony",
+      "category": "style",
+      "nsfw": false,
+      "notes": "古风/国风 style"
+    },
+    {
+      "id": "ofuda-pony",
+      "runware_air_id": "liangwc:ofuda-pony@593678",
+      "name": "Ofuda (miko/jiangshi/pasties)",
+      "url": "https://civitai.com/models/250482",
+      "tags": [
+        "pony",
+        "style",
+        "concept"
+      ],
+      "default_scale": 0.7,
+      "scale_range": [
+        0.4,
+        1.0
+      ],
+      "base_model": "pony",
+      "category": "concept",
+      "nsfw": false,
+      "notes": "神楽/符札/巫女/僵尸/乳房贴纸等概念"
+    },
+    {
+      "id": "sentient-onahole-pony",
+      "runware_air_id": "liangwc:sentient-onahole-pony@439470",
+      "name": "Sentient Onahole (Pony)",
+      "url": "https://civitai.com/models/246523",
+      "tags": [
+        "pony",
+        "nsfw",
+        "concept"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "pony",
+      "category": "concept",
+      "nsfw": true
+    },
+    {
+      "id": "disgusted-face",
+      "runware_air_id": "liangwc:disgusted-face@2372164",
+      "name": "Disgusted Face",
+      "url": "https://civitai.com/models/196908",
+      "tags": [
+        "illustrious",
+        "nsfw",
+        "expression"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character_style",
+      "nsfw": true
+    },
+    {
+      "id": "donut-anus",
+      "runware_air_id": "liangwc:donut-anus@1638285",
+      "name": "Donut Anus",
+      "url": "https://civitai.com/models/392589",
+      "tags": [
+        "illustrious",
+        "nsfw"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character_style",
+      "nsfw": true
+    },
+    {
+      "id": "doggystyle-facing-viewer",
+      "runware_air_id": "liangwc:doggystyle-facing-viewer@674332",
+      "name": "Doggystyle Facing Viewer",
+      "url": "https://civitai.com/models/603258",
+      "tags": [
+        "pony",
+        "nsfw",
+        "pose"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "pony",
+      "category": "character_style",
+      "nsfw": true
+    },
+    {
+      "id": "hyper-gape",
+      "runware_air_id": "liangwc:hyper-gape@447230",
+      "name": "Hyper Gape",
+      "url": "https://civitai.com/models/339025",
+      "tags": [
+        "pony",
+        "nsfw"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "pony",
+      "category": "character_style",
+      "nsfw": true
+    },
+    {
+      "id": "cum-bath",
+      "runware_air_id": "liangwc:cum-bath@895430",
+      "name": "Cum Bath",
+      "url": "https://civitai.com/models/800803",
+      "tags": [
+        "pony",
+        "nsfw"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "pony",
+      "category": "character_style",
+      "nsfw": true
+    },
+    {
+      "id": "expressive-h",
+      "runware_air_id": "liangwc:expressive-h@382152",
+      "name": "ExpressiveH (Hentai LoRA Style)",
+      "url": "https://civitai.com/models/341353",
+      "tags": [
+        "pony",
+        "style",
+        "hen",
+        "nsfw"
+      ],
+      "default_scale": 0.6,
+      "scale_range": [
+        0.3,
+        0.9
+      ],
+      "base_model": "pony",
+      "category": "style",
+      "nsfw": true
+    },
+    {
+      "id": "tifa-ff7",
+      "runware_air_id": "liangwc:tifa-ff7@1401696",
+      "name": "Tifa Lockhart (FF7)",
+      "url": "https://civitai.com/models/1242549",
+      "tags": [
+        "illustrious",
+        "character",
+        "final fantasy"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character",
+      "nsfw": false,
+      "notes": "Tifa FF7R 23套服装"
+    },
+    {
+      "id": "fairy-mge",
+      "runware_air_id": "liangwc:fairy-mge@2146447",
+      "name": "Fairy MGE",
+      "url": "https://civitai.com/models/1853472",
+      "tags": [
+        "illustrious",
+        "nsfw",
+        "monster girl"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character",
+      "nsfw": true,
+      "notes": "Monster Girl Encyclopedia fairy/koonago"
+    },
+    {
+      "id": "ahri",
+      "runware_air_id": "liangwc:ahri@2702288",
+      "name": "Ahri (LoL)",
+      "url": "https://civitai.com/models/406449",
+      "tags": [
+        "illustrious",
+        "character",
+        "league of legends"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character",
+      "nsfw": false,
+      "notes": "Ahri 九尾狐"
+    },
+    {
+      "id": "ani-grok",
+      "runware_air_id": "liangwc:ani-grok@2017854",
+      "name": "Ani (Grok)",
+      "url": "https://civitai.com/models/1776155",
+      "tags": [
+        "illustrious",
+        "character"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character",
+      "nsfw": false,
+      "notes": "Grok Companion 角色"
+    },
+    {
+      "id": "onryo",
+      "runware_air_id": "liangwc:onryo@2870965",
+      "name": "The Onryo (Sadako)",
+      "url": "https://civitai.com/models/124352",
+      "tags": [
+        "illustrious",
+        "character",
+        "horror"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character",
+      "nsfw": false,
+      "notes": "Dead by Daylight 恐怖角色"
+    },
+    {
+      "id": "aerith-ff7-il",
+      "runware_air_id": "liangwc:aerith-ff7-il@3042581",
+      "name": "Aerith (FF7 IL)",
+      "url": "https://civitai.com/models/1118770",
+      "tags": [
+        "illustrious",
+        "character",
+        "final fantasy"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character",
+      "nsfw": false
+    },
+    {
+      "id": "yuna-ffx",
+      "runware_air_id": "liangwc:yuna-ffx@1982307",
+      "name": "Yuna (FFX)",
+      "url": "https://civitai.com/models/1059315",
+      "tags": [
+        "illustrious",
+        "character",
+        "final fantasy"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character",
+      "nsfw": false,
+      "notes": "FFX/X-2 3套服装"
+    },
+    {
+      "id": "ranma",
+      "runware_air_id": "liangwc:ranma@928097",
+      "name": "Ranma 1/2",
+      "url": "https://civitai.com/models/628474",
+      "tags": [
+        "pony",
+        "character",
+        "anime"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "pony",
+      "category": "character",
+      "nsfw": false,
+      "notes": "Ranma Saotome 早乙女乱馬"
+    },
+    {
+      "id": "sadako",
+      "runware_air_id": "liangwc:sadako@566749",
+      "name": "Sadako (The Ring)",
+      "url": "https://civitai.com/models/509946",
+      "tags": [
+        "pony",
+        "character",
+        "horror",
+        "nsfw"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "pony",
+      "category": "character",
+      "nsfw": true
+    },
+    {
+      "id": "aerith-ff7-flux",
+      "runware_air_id": "liangwc:aerith-ff7-flux@1688439",
+      "name": "Aerith (FF7 FLUX)",
+      "url": "https://civitai.com/models/1376392",
+      "tags": [
+        "flux",
+        "character",
+        "final fantasy"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "flux-dev",
+      "category": "character",
+      "nsfw": false
+    },
+    {
+      "id": "guo-feng-face",
+      "runware_air_id": "liangwc:guo-feng-face@2244520",
+      "name": "Guo Feng Face (国风脸)",
+      "url": "https://civitai.com/models/1982867",
+      "tags": [
+        "illustrious",
+        "character",
+        "face",
+        "chinese"
+      ],
+      "default_scale": 0.7,
+      "scale_range": [
+        0.5,
+        1.0
+      ],
+      "base_model": "illustrious",
+      "category": "character",
+      "nsfw": false
+    },
+    {
+      "id": "gufeng-ill",
+      "runware_air_id": "liangwc:gufeng-ill@2748805",
+      "name": "Gufeng/国风/仙子 (Illustrious)",
+      "url": "https://civitai.com/models/2444773",
+      "tags": [
+        "illustrious",
+        "style",
+        "chinese"
+      ],
+      "default_scale": 0.7,
+      "scale_range": [
+        0.4,
+        1.0
+      ],
+      "base_model": "illustrious",
+      "category": "style",
+      "nsfw": false
+    },
+    {
+      "id": "disney-princess",
+      "runware_air_id": "liangwc:disney-princess@1660164",
+      "name": "Disney Princess XL",
+      "url": "https://civitai.com/models/212532",
+      "tags": [
+        "illustrious",
+        "character",
+        "disney"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character",
+      "nsfw": false
+    },
+    {
+      "id": "wednesday-addams",
+      "runware_air_id": "liangwc:wednesday-addams@1917432",
+      "name": "Wednesday Addams",
+      "url": "https://civitai.com/models/457110",
+      "tags": [
+        "illustrious",
+        "character"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character",
+      "nsfw": false
+    },
+    {
+      "id": "hermione-granger",
+      "runware_air_id": "liangwc:hermione-granger@2472457",
+      "name": "Hermione Granger",
+      "url": "https://civitai.com/models/1282238",
+      "tags": [
+        "illustrious",
+        "character",
+        "harry potter"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character",
+      "nsfw": false
+    },
+    {
+      "id": "age-slider",
+      "runware_air_id": "liangwc:age-slider@448977",
+      "name": "Age Slider",
+      "url": "https://civitai.com/models/402667",
+      "tags": [
+        "pony",
+        "concept"
+      ],
+      "default_scale": 0.6,
+      "scale_range": [
+        0.3,
+        1.0
+      ],
+      "base_model": "pony",
+      "category": "concept",
+      "nsfw": false
+    },
+    {
+      "id": "age-slider-ill",
+      "runware_air_id": "liangwc:age-slider-ill@1150298",
+      "name": "Age Slider (Illustrious)",
+      "url": "https://civitai.com/models/1025710",
+      "tags": [
+        "illustrious",
+        "concept",
+        "slider"
+      ],
+      "default_scale": 0.6,
+      "scale_range": [
+        0.2,
+        1.0
+      ],
+      "base_model": "illustrious",
+      "category": "concept",
+      "nsfw": false
+    },
+    {
+      "id": "body-weight-slider",
+      "runware_air_id": "liangwc:body-weight-slider@2825512",
+      "name": "Body Weight Slider (Skinny→Fat)",
+      "url": "https://civitai.com/models/2513759",
+      "tags": [
+        "illustrious",
+        "concept",
+        "slider"
+      ],
+      "default_scale": 0.6,
+      "scale_range": [
+        0.2,
+        1.0
+      ],
+      "base_model": "illustrious",
+      "category": "concept",
+      "nsfw": false
+    },
+    {
+      "id": "toned-body-slider",
+      "runware_air_id": "liangwc:toned-body-slider@2868740",
+      "name": "Toned Body Slider",
+      "url": "https://civitai.com/models/2552628",
+      "tags": [
+        "illustrious",
+        "concept",
+        "slider"
+      ],
+      "default_scale": 0.6,
+      "scale_range": [
+        0.2,
+        1.0
+      ],
+      "base_model": "illustrious",
+      "category": "concept",
+      "nsfw": false
+    },
+    {
+      "id": "pregnancy-slider",
+      "runware_air_id": "liangwc:pregnancy-slider@541806",
+      "name": "Pregnancy Slider",
+      "url": "https://civitai.com/models/487226",
+      "tags": [
+        "pony",
+        "slider",
+        "body"
+      ],
+      "default_scale": 0.6,
+      "scale_range": [
+        0.2,
+        1.0
+      ],
+      "base_model": "pony",
+      "category": "concept",
+      "nsfw": true
+    },
+    {
+      "id": "gape-slider",
+      "runware_air_id": "liangwc:gape-slider@835177",
+      "name": "Gape Slider",
+      "url": "https://civitai.com/models/746852",
+      "tags": [
+        "pony",
+        "slider",
+        "nsfw"
+      ],
+      "default_scale": 0.6,
+      "scale_range": [
+        0.2,
+        1.0
+      ],
+      "base_model": "pony",
+      "category": "concept",
+      "nsfw": true
+    },
+    {
+      "id": "penis-size-pony",
+      "runware_air_id": "liangwc:penis-size-pony@517898",
+      "name": "Penis Size Slider (Pony)",
+      "url": "https://civitai.com/models/465379",
+      "tags": [
+        "pony",
+        "slider",
+        "nsfw"
+      ],
+      "default_scale": 0.6,
+      "scale_range": [
+        0.2,
+        1.0
+      ],
+      "base_model": "pony",
+      "category": "concept",
+      "nsfw": true
+    },
+    {
+      "id": "penis-size-ill",
+      "runware_air_id": "liangwc:penis-size-ill@1831724",
+      "name": "Penis Size Slider (Illu)",
+      "url": "https://civitai.com/models/465379",
+      "tags": [
+        "illustrious",
+        "slider",
+        "nsfw"
+      ],
+      "default_scale": 0.6,
+      "scale_range": [
+        0.2,
+        1.0
+      ],
+      "base_model": "illustrious",
+      "category": "concept",
+      "nsfw": true
+    },
+    {
+      "id": "breast-size-pony",
+      "runware_air_id": "liangwc:breast-size-pony@534952",
+      "name": "Breast Size Slider (Pony)",
+      "url": "https://civitai.com/models/481016",
+      "tags": [
+        "pony",
+        "slider"
+      ],
+      "default_scale": 0.6,
+      "scale_range": [
+        0.2,
+        1.0
+      ],
+      "base_model": "pony",
+      "category": "concept",
+      "nsfw": false
+    },
+    {
+      "id": "nipple-size-pony",
+      "runware_air_id": "liangwc:nipple-size-pony@1264945",
+      "name": "Nipple Size Slider (Pony)",
+      "url": "https://civitai.com/models/1074781",
+      "tags": [
+        "pony",
+        "slider",
+        "nsfw"
+      ],
+      "default_scale": 0.6,
+      "scale_range": [
+        0.2,
+        1.0
+      ],
+      "base_model": "pony",
+      "category": "concept",
+      "nsfw": true
+    },
+    {
+      "id": "nipple-size-ill",
+      "runware_air_id": "liangwc:nipple-size-ill@1206518",
+      "name": "Nipple Size Slider (Illu)",
+      "url": "https://civitai.com/models/1074781",
+      "tags": [
+        "illustrious",
+        "slider",
+        "nsfw"
+      ],
+      "default_scale": 0.6,
+      "scale_range": [
+        0.2,
+        1.0
+      ],
+      "base_model": "illustrious",
+      "category": "concept",
+      "nsfw": true
+    },
+    {
+      "id": "breast-sag-slider",
+      "runware_air_id": "liangwc:breast-sag-slider@2618573",
+      "name": "Breast Sag Slider",
+      "url": "https://civitai.com/models/502132",
+      "tags": [
+        "illustrious",
+        "slider"
+      ],
+      "default_scale": 0.6,
+      "scale_range": [
+        0.2,
+        1.0
+      ],
+      "base_model": "illustrious",
+      "category": "concept",
+      "nsfw": false
+    },
+    {
+      "id": "eye-size-slider",
+      "runware_air_id": "liangwc:eye-size-slider@535841",
+      "name": "Eye Size Slider",
+      "url": "https://civitai.com/models/481810",
+      "tags": [
+        "pony",
+        "slider"
+      ],
+      "default_scale": 0.6,
+      "scale_range": [
+        0.2,
+        1.0
+      ],
+      "base_model": "pony",
+      "category": "concept",
+      "nsfw": false
+    },
+    {
+      "id": "detail-enhancer-ill",
+      "runware_air_id": "liangwc:detail-enhancer-ill@1983243",
+      "name": "Detail Enhancer IL",
+      "url": "https://civitai.com/models/1450571",
+      "tags": [
+        "illustrious",
+        "concept",
+        "enhancer"
+      ],
+      "default_scale": 0.5,
+      "scale_range": [
+        0.2,
+        0.8
+      ],
+      "base_model": "illustrious",
+      "category": "concept",
+      "nsfw": false
+    },
+    {
+      "id": "detail-enhancer-pony",
+      "runware_air_id": "liangwc:detail-enhancer-pony@1719171",
+      "name": "Detail Enhancer Pony",
+      "url": "https://civitai.com/models/1450571",
+      "tags": [
+        "pony",
+        "concept",
+        "enhancer"
+      ],
+      "default_scale": 0.5,
+      "scale_range": [
+        0.2,
+        0.8
+      ],
+      "base_model": "pony",
+      "category": "concept",
+      "nsfw": false
+    },
+    {
+      "id": "multiple-insertion",
+      "runware_air_id": "liangwc:multiple-insertion@812378",
+      "name": "Multiple Insertion / Penetration",
+      "url": "https://civitai.com/models/89125",
+      "tags": [
+        "pony",
+        "nsfw"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "pony",
+      "category": "character_style",
+      "nsfw": true
+    },
+    {
+      "id": "giantess-building-fuck",
+      "runware_air_id": "liangwc:giantess-building-fuck@847258",
+      "name": "Giantess Building Fuck",
+      "url": "https://civitai.com/models/757709",
+      "tags": [
+        "pony",
+        "nsfw",
+        "giantess"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "pony",
+      "category": "character_style",
+      "nsfw": true
+    },
+    {
+      "id": "large-insertion-pov",
+      "runware_air_id": "liangwc:large-insertion-pov@2578214",
+      "name": "Large Insertion POV",
+      "url": "https://civitai.com/models/2291093",
+      "tags": [
+        "illustrious",
+        "nsfw",
+        "pov"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character_style",
+      "nsfw": true
+    },
+    {
+      "id": "building-insertion-giantess",
+      "runware_air_id": "liangwc:building-insertion-giantess@1610430",
+      "name": "Building Insertion / Giantess",
+      "url": "https://civitai.com/models/1424762",
+      "tags": [
+        "illustrious",
+        "nsfw",
+        "giantess"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character_style",
+      "nsfw": true
+    },
+    {
+      "id": "barbie-insertion",
+      "runware_air_id": "liangwc:barbie-insertion@2565241",
+      "name": "Barbie Insertion",
+      "url": "https://civitai.com/models/2279199",
+      "tags": [
+        "illustrious",
+        "nsfw"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character_style",
+      "nsfw": true
+    },
+    {
+      "id": "ningyao",
+      "runware_air_id": "liangwc:ningyao@2168402",
+      "name": "宁姚/剑来",
+      "url": "https://civitai.com/models/1915847",
+      "tags": [
+        "illustrious",
+        "character",
+        "guoman"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character",
+      "nsfw": false
+    },
+    {
+      "id": "sanguosha-style",
+      "runware_air_id": "liangwc:sanguosha-style@1569919",
+      "name": "三国杀风格",
+      "url": "https://civitai.com/models/1389166",
+      "tags": [
+        "flux",
+        "style",
+        "guoman"
+      ],
+      "default_scale": 0.6,
+      "scale_range": [
+        0.3,
+        0.9
+      ],
+      "base_model": "flux-dev",
+      "category": "style",
+      "nsfw": false
+    },
+    {
+      "id": "mystic-hentai",
+      "runware_air_id": "liangwc:mystic-hentai@1892397",
+      "name": "Mystic Hentai (FLUX NSFW)",
+      "url": "https://civitai.com/models/1671936",
+      "tags": [
+        "flux",
+        "nsfw",
+        "anime",
+        "runware-uploaded"
+      ],
+      "default_scale": 0.7,
+      "scale_range": [
+        0.4,
+        1.0
+      ],
+      "description": "Fork from Mystic XXX: explicitly trained for non-realistic NSFW images. 146MB FLUX LoRA. AIR: liangwc:mystic-hentai@1892397",
+      "base_model": "flux-dev",
+      "category": "character_style",
+      "nsfw": true,
+      "incompatible_with": [],
+      "notes": "2026-07-05 uploaded. 146MB, non-realistic style. Works at 0.6-0.8 for top nudity. Does NOT push to full genital detail alone."
+    },
+    {
+      "id": "mystic-toon",
+      "runware_air_id": "liangwc:mystic-toon@1911266",
+      "name": "Mystic Toon (FLUX NSFW)",
+      "url": "https://civitai.com/models/1688726",
+      "tags": [
+        "flux",
+        "nsfw",
+        "toon",
+        "anime",
+        "runware-uploaded"
+      ],
+      "default_scale": 0.7,
+      "scale_range": [
+        0.4,
+        1.0
+      ],
+      "description": "Fork from Mystic Hentai: toon/anime style NSFW. 146MB FLUX LoRA. AIR: liangwc:mystic-toon@1911266",
+      "base_model": "flux-dev",
+      "category": "character_style",
+      "nsfw": true,
+      "incompatible_with": [],
+      "notes": "2026-07-05 uploaded. 146MB toon style. Similar to Mystic Hentai but more cartoony. Top nudity only."
+    },
+    {
+      "id": "flux-anime-nsfw",
+      "runware_air_id": "liangwc:flux-anime-nsfw@775500",
+      "name": "FLUX ANIME NSFW STYLE",
+      "url": "https://civitai.com/models/692960",
+      "tags": [
+        "flux",
+        "nsfw",
+        "anime",
+        "lightweight",
+        "runware-uploaded"
+      ],
+      "default_scale": 0.6,
+      "scale_range": [
+        0.3,
+        0.9
+      ],
+      "description": "Lightweight 18MB FLUX anime NSFW style LoRA. Too small for reliable NSFW. AIR: liangwc:flux-anime-nsfw@775500",
+      "base_model": "flux-dev",
+      "category": "style",
+      "nsfw": true,
+      "incompatible_with": [],
+      "notes": "2026-07-05 uploaded. 18MB — too weak for reliable NSFW. Not recommended."
+    },
+    {
+      "id": "vagina-hq",
+      "runware_air_id": "liangwc:vagina-hq@935742",
+      "name": "Detailed Woman Genitals (FLUX)",
+      "url": "https://civitai.com/models/796605",
+      "tags": [
+        "flux",
+        "nsfw",
+        "anatomy",
+        "runware-uploaded"
+      ],
+      "default_scale": 0.5,
+      "scale_range": [
+        0.3,
+        0.8
+      ],
+      "description": "仅 19MB / dim=2 — FLUX 女性器官细节 LoRA。专门用于添加 vagina/labia，不带写实风格 bias。AIR: liangwc:vagina-hq@935742",
+      "base_model": "flux-dev",
+      "category": "anatomy",
+      "nsfw": true,
+      "incompatible_with": [],
+      "notes": "2026-07-05 上传验证。堆叠风格 LoRA + NSFW MASTER 0.5 时用此加器官细节。19MB dim=2 不会压风格。单独使用时 FLUX 会取巧遮挡。"
+    },
+    {
+      "id": "dynasty-warriors-style",
+      "runware_air_id": "liangwc:dynasty-warriors-style@3045074",
+      "name": "真三国无双8 Artist Style",
+      "url": "https://civitai.com/models/2710670",
+      "tags": [
+        "illustrious",
+        "style"
+      ],
+      "default_scale": 0.6,
+      "scale_range": [
+        0.3,
+        0.9
+      ],
+      "base_model": "illustrious",
+      "category": "style",
+      "nsfw": false
+    },
+    {
+      "id": "ssy-wulishishen",
+      "runware_air_id": "liangwc:ssy-wulishishen@2317184",
+      "name": "少司缘·巫礼祀神",
+      "url": "https://civitai.com/models/2047406",
+      "tags": [
+        "illustrious",
+        "character",
+        "wangzhe"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character",
+      "nsfw": false
+    },
+    {
+      "id": "ssy-linggua",
+      "runware_air_id": "liangwc:ssy-linggua@2126391",
+      "name": "少司缘·灵卦秘语",
+      "url": "https://civitai.com/models/1878659",
+      "tags": [
+        "illustrious",
+        "character",
+        "wangzhe"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character",
+      "nsfw": false
+    },
+    {
+      "id": "ssy-tushan-honghong",
+      "runware_air_id": "liangwc:ssy-tushan-honghong@2829173",
+      "name": "少司缘·涂山红红联动",
+      "url": "https://civitai.com/models/2517086",
+      "tags": [
+        "illustrious",
+        "character",
+        "wangzhe"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character",
+      "nsfw": false
+    },
+    {
+      "id": "ankela-mojing",
+      "runware_air_id": "liangwc:ankela-mojing@2687940",
+      "name": "安琪拉·魔镜",
+      "url": "https://civitai.com/models/2390576",
+      "tags": [
+        "illustrious",
+        "character",
+        "wangzhe"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character",
+      "nsfw": false
+    },
+    {
+      "id": "yao-wangzhe",
+      "runware_air_id": "liangwc:yao-wangzhe@2824482",
+      "name": "瑶·王者荣耀V2.2",
+      "url": "https://civitai.com/models/2512847",
+      "tags": [
+        "illustrious",
+        "character",
+        "wangzhe"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character",
+      "nsfw": false
+    },
+    {
+      "id": "ssy-pony",
+      "runware_air_id": "liangwc:ssy-pony@774815",
+      "name": "少司缘·王者荣耀 (Pony)",
+      "url": "https://civitai.com/models/666782",
+      "tags": [
+        "pony",
+        "character",
+        "wangzhe"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "pony",
+      "category": "character",
+      "nsfw": false
+    },
+    {
+      "id": "sunshangxiang",
+      "runware_air_id": "liangwc:sunshangxiang@2049582",
+      "name": "孙尚香·王者荣耀",
+      "url": "https://civitai.com/models/1811137",
+      "tags": [
+        "illustrious",
+        "character",
+        "wangzhe"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character",
+      "nsfw": false
+    },
+    {
+      "id": "sunshangxiang-v2",
+      "runware_air_id": "liangwc:sunshangxiang-v2@2644919",
+      "name": "孙尚香·王者荣耀V2",
+      "url": "https://civitai.com/models/2351626",
+      "tags": [
+        "illustrious",
+        "character",
+        "wangzhe"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character",
+      "nsfw": false
+    },
+    {
+      "id": "daji-wangzhe",
+      "runware_air_id": "liangwc:daji-wangzhe@3083699",
+      "name": "妲己·王者荣耀",
+      "url": "https://civitai.com/models/2331448",
+      "tags": [
+        "illustrious",
+        "character",
+        "wangzhe"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character",
+      "nsfw": false
+    },
+    {
+      "id": "ssy-wulishishen-v2",
+      "runware_air_id": "liangwc:ssy-wulishishen-v2@2894054",
+      "name": "少司缘·巫礼祀神V2",
+      "url": "https://civitai.com/models/2575923",
+      "tags": [
+        "illustrious",
+        "character",
+        "wangzhe"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character",
+      "nsfw": false
+    },
+    {
+      "id": "ssy-sanxingdui",
+      "runware_air_id": "liangwc:ssy-sanxingdui@2846547",
+      "name": "少司缘·三星堆",
+      "url": "https://civitai.com/models/2532812",
+      "tags": [
+        "illustrious",
+        "character",
+        "wangzhe"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character",
+      "nsfw": false
+    },
+    {
+      "id": "ankela-kuluomi",
+      "runware_air_id": "liangwc:ankela-kuluomi@3005489",
+      "name": "安琪拉·库洛米",
+      "url": "https://civitai.com/models/2676704",
+      "tags": [
+        "illustrious",
+        "character",
+        "wangzhe"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character",
+      "nsfw": false
+    },
+    {
+      "id": "daji-jiuwei",
+      "runware_air_id": "liangwc:daji-jiuwei@3078443",
+      "name": "妲己·青丘九尾",
+      "url": "https://civitai.com/models/2737650",
+      "tags": [
+        "illustrious",
+        "character",
+        "wangzhe"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character",
+      "nsfw": false
+    },
+    {
+      "id": "gothic-detail-enhancer-ill",
+      "runware_air_id": "liangwc:gothic-detail-enhancer@1672292",
+      "name": "Gothic Detail Enhancer (Illu)",
+      "url": "https://civitai.com/models/1478407",
+      "tags": [
+        "illustrious",
+        "concept",
+        "enhancer",
+        "gothic"
+      ],
+      "default_scale": 0.5,
+      "scale_range": [
+        0.2,
+        0.8
+      ],
+      "base_model": "illustrious",
+      "category": "concept",
+      "nsfw": false
+    },
+    {
+      "id": "gothic-detail-enhancer-pony",
+      "runware_air_id": "liangwc:gothic-detail-enhancer@1672292",
+      "name": "Gothic Detail Enhancer (Pony)",
+      "url": "https://civitai.com/models/1478407",
+      "tags": [
+        "pony",
+        "concept",
+        "enhancer",
+        "gothic"
+      ],
+      "default_scale": 0.5,
+      "scale_range": [
+        0.2,
+        0.8
+      ],
+      "base_model": "pony",
+      "category": "concept",
+      "nsfw": false
+    },
+    {
+      "id": "dramatic-lighting",
+      "runware_air_id": "liangwc:dramatic-lighting@2610246",
+      "name": "Dramatic Lighting & Realism Enhancer",
+      "url": "https://civitai.com/models/2250412",
+      "tags": [
+        "illustrious",
+        "concept",
+        "lighting"
+      ],
+      "default_scale": 0.5,
+      "scale_range": [
+        0.2,
+        0.8
+      ],
+      "base_model": "illustrious",
+      "category": "concept",
+      "nsfw": false
+    },
+    {
+      "id": "bss-detail-slider-ill",
+      "runware_air_id": "liangwc:bss-detail-slider@2181616",
+      "name": "BSS Detail Enhancer Slider (Illu)",
+      "url": "https://civitai.com/models/1850267",
+      "tags": [
+        "illustrious",
+        "concept",
+        "slider"
+      ],
+      "default_scale": 0.5,
+      "scale_range": [
+        0.2,
+        1.0
+      ],
+      "base_model": "illustrious",
+      "category": "concept",
+      "nsfw": false
+    },
+    {
+      "id": "bss-detail-slider-pony",
+      "runware_air_id": "liangwc:bss-detail-slider@2181616",
+      "name": "BSS Detail Enhancer Slider (Pony)",
+      "url": "https://civitai.com/models/1850267",
+      "tags": [
+        "pony",
+        "concept",
+        "slider"
+      ],
+      "default_scale": 0.5,
+      "scale_range": [
+        0.2,
+        1.0
+      ],
+      "base_model": "pony",
+      "category": "concept",
+      "nsfw": false
+    },
+    {
+      "id": "bss-visual-slider-ill",
+      "runware_air_id": "liangwc:bss-visual-slider@2832193",
+      "name": "BSS Visual Enhancer Slider (Illu)",
+      "url": "https://civitai.com/models/1844250",
+      "tags": [
+        "illustrious",
+        "concept",
+        "slider"
+      ],
+      "default_scale": 0.5,
+      "scale_range": [
+        0.2,
+        1.0
+      ],
+      "base_model": "illustrious",
+      "category": "concept",
+      "nsfw": false
+    },
+    {
+      "id": "bss-visual-slider-pony",
+      "runware_air_id": "liangwc:bss-visual-slider@2832193",
+      "name": "BSS Visual Enhancer Slider (Pony)",
+      "url": "https://civitai.com/models/1844250",
+      "tags": [
+        "pony",
+        "concept",
+        "slider"
+      ],
+      "default_scale": 0.5,
+      "scale_range": [
+        0.2,
+        1.0
+      ],
+      "base_model": "pony",
+      "category": "concept",
+      "nsfw": false
+    },
+    {
+      "id": "extreme-spread",
+      "runware_air_id": "liangwc:yin-nvtu@2221663",
+      "name": "Extreme Spread Pussy Anal",
+      "url": "https://civitai.com/models/1962794",
+      "tags": [
+        "illustrious",
+        "nsfw"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character_style",
+      "nsfw": true
+    },
+    {
+      "id": "bounty-pov",
+      "runware_air_id": "liangwc:daji-wangzhe-v2@2733172",
+      "name": "Extreme Close-up Pov [Bounty]",
+      "url": "https://civitai.com/models/2430813",
+      "tags": [
+        "illustrious",
+        "nsfw",
+        "pov"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character_style",
+      "nsfw": true
+    },
+    {
+      "id": "extreme-detailed",
+      "runware_air_id": "liangwc:moon-phase-yao@2569127",
+      "name": "Extreme Detailed",
+      "url": "https://civitai.com/models/2282704",
+      "tags": [
+        "illustrious",
+        "concept",
+        "enhancer"
+      ],
+      "default_scale": 0.5,
+      "scale_range": [
+        0.2,
+        0.8
+      ],
+      "base_model": "illustrious",
+      "category": "concept",
+      "nsfw": false
+    },
+    {
+      "id": "lewd-details-enchancer",
+      "runware_air_id": "liangwc:yangyuhuan@1613410",
+      "name": "Fucked Silly / Lewd Details Enchancer",
+      "url": "https://civitai.com/models/1273929",
+      "tags": [
+        "illustrious",
+        "concept",
+        "enhancer",
+        "nsfw"
+      ],
+      "default_scale": 0.5,
+      "scale_range": [
+        0.2,
+        0.8
+      ],
+      "base_model": "illustrious",
+      "category": "concept",
+      "nsfw": true
+    },
+    {
+      "id": "realistic-anime-style-flux",
+      "runware_air_id": "liangwc:waner-flux@769980",
+      "name": "Realistic Anime Style (FLUX)",
+      "url": "https://civitai.com/models/536084",
+      "tags": [
+        "flux",
+        "style"
+      ],
+      "default_scale": 0.6,
+      "scale_range": [
+        0.3,
+        0.9
+      ],
+      "base_model": "flux-dev",
+      "category": "style",
+      "nsfw": false
+    },
+    {
+      "id": "realistic-anime-style-v1",
+      "runware_air_id": "liangwc:waner-v1@595948",
+      "name": "Realistic Anime Style (SDXL)",
+      "url": "https://civitai.com/models/536084",
+      "tags": [
+        "illustrious",
+        "style"
+      ],
+      "default_scale": 0.6,
+      "scale_range": [
+        0.3,
+        0.9
+      ],
+      "base_model": "illustrious",
+      "category": "style",
+      "nsfw": false
+    },
+    {
+      "id": "extreme-bdsm",
+      "runware_air_id": "liangwc:miyue@1208501",
+      "name": "Extreme BDSM / JM",
+      "url": "https://civitai.com/models/1076509",
+      "tags": [
+        "illustrious",
+        "nsfw",
+        "fetish"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character_style",
+      "nsfw": true
+    },
+    {
+      "id": "armless-amputee",
+      "runware_air_id": "liangwc:mulan@1222872",
+      "name": "Armless / Double Amputee",
+      "url": "https://civitai.com/models/1088883",
+      "tags": [
+        "illustrious",
+        "nsfw",
+        "fetish"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character_style",
+      "nsfw": true
+    },
+    {
+      "id": "tiny-girl",
+      "runware_air_id": "liangwc:shangguan-waner@480044",
+      "name": "Tiny Girl",
+      "url": "https://civitai.com/models/430863",
+      "tags": [
+        "pony",
+        "nsfw",
+        "giantess"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "pony",
+      "category": "character_style",
+      "nsfw": true
+    },
+    {
+      "id": "extreme-fear",
+      "runware_air_id": "liangwc:luban@1960256",
+      "name": "Terrified / Extreme Fear",
+      "url": "https://civitai.com/models/1732009",
+      "tags": [
+        "illustrious",
+        "nsfw",
+        "expression"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character_style",
+      "nsfw": true
+    },
+    {
+      "id": "giantess-xl",
+      "runware_air_id": "liangwc:giantess-xl@2495565",
+      "name": "Giantess XL",
+      "url": "https://civitai.com/models/199258",
+      "tags": [
+        "illustrious",
+        "nsfw",
+        "giantess"
+      ],
+      "default_scale": 0.7,
+      "scale_range": [
+        0.4,
+        1.0
+      ],
+      "base_model": "illustrious",
+      "category": "character_style",
+      "nsfw": true
+    },
+    {
+      "id": "vore-internals",
+      "runware_air_id": "liangwc:vore-internals@1086041",
+      "name": "Vore Internals",
+      "url": "https://civitai.com/models/20837",
+      "tags": [
+        "illustrious",
+        "nsfw",
+        "fetish"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character_style",
+      "nsfw": true
+    },
+    {
+      "id": "silent-hill-nurse",
+      "runware_air_id": "liangwc:silent-hill-nurse@2341418",
+      "name": "Nurses - Silent Hill (horror)",
+      "url": "https://civitai.com/models/155163",
+      "tags": [
+        "illustrious",
+        "nsfw",
+        "horror"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character_style",
+      "nsfw": true
+    },
+    {
+      "id": "horror-anime-style",
+      "runware_air_id": "liangwc:horror-anime-style@2162008",
+      "name": "Horror Anime Style",
+      "url": "https://civitai.com/models/848136",
+      "tags": [
+        "illustrious",
+        "style",
+        "horror"
+      ],
+      "default_scale": 0.6,
+      "scale_range": [
+        0.3,
+        0.9
+      ],
+      "base_model": "illustrious",
+      "category": "style",
+      "nsfw": false
+    },
+    {
+      "id": "tomie-pony",
+      "runware_air_id": "liangwc:tomie-pony@686806",
+      "name": "Tomie Kawakami (Pony)",
+      "url": "https://civitai.com/models/614372",
+      "tags": [
+        "pony",
+        "character",
+        "horror"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "pony",
+      "category": "character",
+      "nsfw": false
+    },
+    {
+      "id": "tomie-anime-ill",
+      "runware_air_id": "liangwc:tomie-anime-ill@1305890",
+      "name": "Tomie Anime Style (Illu)",
+      "url": "https://civitai.com/models/1160917",
+      "tags": [
+        "illustrious",
+        "character",
+        "horror"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character",
+      "nsfw": false
+    },
+    {
+      "id": "gothic-niji-style",
+      "runware_air_id": "liangwc:gothic-niji-style@2498503",
+      "name": "MoriiMee Gothic Niji Style",
+      "url": "https://civitai.com/models/915918",
+      "tags": [
+        "illustrious",
+        "style",
+        "gothic"
+      ],
+      "default_scale": 0.6,
+      "scale_range": [
+        0.3,
+        0.9
+      ],
+      "base_model": "illustrious",
+      "category": "style",
+      "nsfw": false
+    },
+    {
+      "id": "trex-studio-style",
+      "runware_air_id": "liangwc:trex-studio-style@1804885",
+      "name": "T-Rex Studio V2 Style",
+      "url": "https://civitai.com/models/960593",
+      "tags": [
+        "illustrious",
+        "style"
+      ],
+      "default_scale": 0.6,
+      "scale_range": [
+        0.3,
+        0.9
+      ],
+      "base_model": "illustrious",
+      "category": "style",
+      "nsfw": false
+    },
+    {
+      "id": "add-micro-details",
+      "runware_air_id": "liangwc:add-micro-details@2832991",
+      "name": "Add Micro Details",
+      "url": "https://civitai.com/models/1377820",
+      "tags": [
+        "illustrious",
+        "concept",
+        "enhancer"
+      ],
+      "default_scale": 0.5,
+      "scale_range": [
+        0.2,
+        0.8
+      ],
+      "base_model": "illustrious",
+      "category": "concept",
+      "nsfw": false
+    },
+    {
+      "id": "female-pov",
+      "runware_air_id": "liangwc:female-pov@2486222",
+      "name": "Female POV",
+      "url": "https://civitai.com/models/427349",
+      "tags": [
+        "illustrious",
+        "nsfw",
+        "pov"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character_style",
+      "nsfw": true
+    },
+    {
+      "id": "hyperrealistic",
+      "runware_air_id": "liangwc:hyperrealistic@1914557",
+      "name": "Hyperrealistic",
+      "url": "https://civitai.com/models/626603",
+      "tags": [
+        "illustrious",
+        "concept",
+        "enhancer"
+      ],
+      "default_scale": 0.5,
+      "scale_range": [
+        0.2,
+        0.8
+      ],
+      "base_model": "illustrious",
+      "category": "concept",
+      "nsfw": false
+    },
+    {
+      "id": "uncensored-ponyxl",
+      "runware_air_id": "liangwc:uncensored-ponyxl@416689",
+      "name": "Uncensored PonyXL",
+      "url": "https://civitai.com/models/339269",
+      "tags": [
+        "pony",
+        "nsfw",
+        "concept"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "pony",
+      "category": "concept",
+      "nsfw": true
+    },
+    {
+      "id": "pov-standing-doggy",
+      "runware_air_id": "liangwc:pov-standing-doggy@2461583",
+      "name": "Pov Standing Doggy + Missionary",
+      "url": "https://civitai.com/models/530390",
+      "tags": [
+        "illustrious",
+        "nsfw",
+        "pov"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character_style",
+      "nsfw": true
+    },
+    {
+      "id": "pov-cowgirl",
+      "runware_air_id": "liangwc:pov-cowgirl@2488358",
+      "name": "Pov Cowgirl (Looking Down)",
+      "url": "https://civitai.com/models/438394",
+      "tags": [
+        "illustrious",
+        "nsfw",
+        "pov"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character_style",
+      "nsfw": true
+    },
+    {
+      "id": "pov-facesitting-v2",
+      "runware_air_id": "liangwc:pov-facesitting-v2@576510",
+      "name": "POV Facesitting v2",
+      "url": "https://civitai.com/models/518838",
+      "tags": [
+        "pony",
+        "nsfw",
+        "pov"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "pony",
+      "category": "character_style",
+      "nsfw": true
+    },
+    {
+      "id": "pov-hug-kiss",
+      "runware_air_id": "liangwc:pov-hug-kiss@1639019",
+      "name": "Hug/Kissing POV",
+      "url": "https://civitai.com/models/731660",
+      "tags": [
+        "illustrious",
+        "nsfw",
+        "pov"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character_style",
+      "nsfw": true
+    },
+    {
+      "id": "pov-reverse-cowgirl",
+      "runware_air_id": "liangwc:pov-reverse-cowgirl@1412807",
+      "name": "Pov Reverse Cowgirl",
+      "url": "https://civitai.com/models/547872",
+      "tags": [
+        "illustrious",
+        "nsfw",
+        "pov"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character_style",
+      "nsfw": true
+    },
+    {
+      "id": "pov-footworship",
+      "runware_air_id": "liangwc:pov-footworship@1171421",
+      "name": "[Pov] FootWorship",
+      "url": "https://civitai.com/models/946498",
+      "tags": [
+        "illustrious",
+        "nsfw",
+        "pov"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character_style",
+      "nsfw": true
+    },
+    {
+      "id": "cowgirl-position",
+      "runware_air_id": "liangwc:cowgirl-position@1797834",
+      "name": "Cowgirl Position Sex",
+      "url": "https://civitai.com/models/717557",
+      "tags": [
+        "illustrious",
+        "nsfw",
+        "pov"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character_style",
+      "nsfw": true
+    },
+    {
+      "id": "pov-head-under-clothes",
+      "runware_air_id": "liangwc:pov-head-under-clothes@1077941",
+      "name": "POV Head Under Clothes",
+      "url": "https://civitai.com/models/775379",
+      "tags": [
+        "illustrious",
+        "nsfw",
+        "pov"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "character_style",
+      "nsfw": true
+    },
+    {
+      "id": "mature-slider",
+      "runware_air_id": "liangwc:mature-slider@2396030",
+      "name": "Mature Slider",
+      "url": "https://civitai.com/models/2118055",
+      "tags": [
+        "illustrious",
+        "concept",
+        "slider"
+      ],
+      "default_scale": 0.6,
+      "scale_range": [
+        0.2,
+        1.0
+      ],
+      "base_model": "illustrious",
+      "category": "concept",
+      "nsfw": true
+    },
+    {
+      "id": "waist-slider",
+      "runware_air_id": "liangwc:waist-slider@2834076",
+      "name": "Waist Slider",
+      "url": "https://civitai.com/models/2521578",
+      "tags": [
+        "illustrious",
+        "concept",
+        "slider"
+      ],
+      "default_scale": 0.6,
+      "scale_range": [
+        0.2,
+        1.0
+      ],
+      "base_model": "illustrious",
+      "category": "concept",
+      "nsfw": false
+    },
+    {
+      "id": "nsfw-slider",
+      "runware_air_id": "liangwc:nsfw-slider@2876566",
+      "name": "NSFW Slider",
+      "url": "https://civitai.com/models/2559781",
+      "tags": [
+        "illustrious",
+        "concept",
+        "slider"
+      ],
+      "default_scale": 0.6,
+      "scale_range": [
+        0.2,
+        1.0
+      ],
+      "base_model": "illustrious",
+      "category": "concept",
+      "nsfw": true
+    },
+    {
+      "id": "unknown-slider",
+      "runware_air_id": "liangwc:unknown-slider@2654369",
+      "name": "Unknown Slider",
+      "url": "https://civitai.com/models/2360095",
+      "tags": [
+        "illustrious",
+        "concept",
+        "slider"
+      ],
+      "default_scale": 0.6,
+      "scale_range": [
+        0.2,
+        1.0
+      ],
+      "base_model": "illustrious",
+      "category": "concept",
+      "nsfw": false
+    },
+    {
+      "id": "penis-bulge-slider",
+      "runware_air_id": "liangwc:penis-bulge-slider@575298",
+      "name": "Penis Bulge Slider",
+      "url": "https://civitai.com/models/517729",
+      "tags": [
+        "pony",
+        "concept",
+        "slider"
+      ],
+      "default_scale": 0.6,
+      "scale_range": [
+        0.2,
+        1.0
+      ],
+      "base_model": "pony",
+      "category": "concept",
+      "nsfw": true
+    },
+    {
+      "id": "darker-images-slider",
+      "runware_air_id": "liangwc:darker-images-slider@989098",
+      "name": "Darker Images Slider",
+      "url": "https://civitai.com/models/883616",
+      "tags": [
+        "pony",
+        "concept",
+        "slider"
+      ],
+      "default_scale": 0.6,
+      "scale_range": [
+        0.2,
+        1.0
+      ],
+      "base_model": "pony",
+      "category": "concept",
+      "nsfw": false
+    },
+    {
+      "id": "pussy-juice-slider",
+      "runware_air_id": "liangwc:pussy-juice-slider@3077821",
+      "name": "Pussy Juice Amount Slider",
+      "url": "https://civitai.com/models/2737148",
+      "tags": [
+        "illustrious",
+        "concept",
+        "slider",
+        "nsfw"
+      ],
+      "default_scale": 0.6,
+      "scale_range": [
+        0.2,
+        1.0
+      ],
+      "base_model": "illustrious",
+      "category": "concept",
+      "nsfw": true
+    },
+    {
+      "id": "pregnancy-slider-ill",
+      "runware_air_id": "liangwc:pregnancy-slider-ill@1974468",
+      "name": "Pregnancy Slider (Illu)",
+      "url": "https://civitai.com/models/1744607",
+      "tags": [
+        "illustrious",
+        "concept",
+        "slider",
+        "nsfw"
+      ],
+      "default_scale": 0.6,
+      "scale_range": [
+        0.2,
+        1.0
+      ],
+      "base_model": "illustrious",
+      "category": "concept",
+      "nsfw": true
+    },
+    {
+      "id": "cum-on-tongue",
+      "runware_air_id": "liangwc:cum-on-tongue@814441",
+      "name": "Better Cum on Tongue",
+      "url": "https://civitai.com/models/728342",
+      "tags": [
+        "pony",
+        "nsfw",
+        "concept"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "pony",
+      "category": "concept",
+      "nsfw": true
+    },
+    {
+      "id": "cum-pool",
+      "runware_air_id": "liangwc:cum-pool@2246988",
+      "name": "Cum Pool",
+      "url": "https://civitai.com/models/1435661",
+      "tags": [
+        "illustrious",
+        "nsfw",
+        "concept"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "concept",
+      "nsfw": true
+    },
+    {
+      "id": "cum-slider-ill",
+      "runware_air_id": "liangwc:cum-slider-ill@1903191",
+      "name": "Cum Slider",
+      "url": "https://civitai.com/models/1681513",
+      "tags": [
+        "illustrious",
+        "nsfw",
+        "slider"
+      ],
+      "default_scale": 0.6,
+      "scale_range": [
+        0.2,
+        1.0
+      ],
+      "base_model": "illustrious",
+      "category": "concept",
+      "nsfw": true
+    },
+    {
+      "id": "cum-bath-ill",
+      "runware_air_id": "liangwc:cum-bath-ill@2843774",
+      "name": "Cum Bath (Illu)",
+      "url": "https://civitai.com/models/1208083",
+      "tags": [
+        "illustrious",
+        "nsfw",
+        "concept"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "concept",
+      "nsfw": true
+    },
+    {
+      "id": "cum-ill",
+      "runware_air_id": "liangwc:cum-ill@1178301",
+      "name": "Cum Ill",
+      "url": "https://civitai.com/models/1050099",
+      "tags": [
+        "illustrious",
+        "nsfw",
+        "concept"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "concept",
+      "nsfw": true
+    },
+    {
+      "id": "cum-disgust",
+      "runware_air_id": "liangwc:cum-disgust@2307512",
+      "name": "Cum Disgust",
+      "url": "https://civitai.com/models/2038763",
+      "tags": [
+        "illustrious",
+        "nsfw",
+        "concept"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "concept",
+      "nsfw": true
+    },
+    {
+      "id": "cum-amount-slider",
+      "runware_air_id": "liangwc:cum-amount-slider@3072145",
+      "name": "Cum Amount Slider",
+      "url": "https://civitai.com/models/2732497",
+      "tags": [
+        "illustrious",
+        "nsfw",
+        "slider"
+      ],
+      "default_scale": 0.6,
+      "scale_range": [
+        0.2,
+        1.0
+      ],
+      "base_model": "illustrious",
+      "category": "concept",
+      "nsfw": true
+    },
+    {
+      "id": "huge-cum-pool",
+      "runware_air_id": "liangwc:huge-cum-pool@2494542",
+      "name": "Huge Cum & Cum Pool",
+      "url": "https://civitai.com/models/1138883",
+      "tags": [
+        "illustrious",
+        "nsfw",
+        "concept"
+      ],
+      "default_scale": 0.8,
+      "scale_range": [
+        0.5,
+        1.2
+      ],
+      "base_model": "illustrious",
+      "category": "concept",
+      "nsfw": true
+    }
+  ],
+  "categories": {
+    "character_style": "Character LoRAs. ⚠️ Same-category stacking dilutes both.",
+    "texture": "Material and fabric textures",
+    "environment": "Background and environment",
+    "lighting": "Lighting styles",
+    "concept": "Abstract concept LoRAs",
+    "style": "Artistic style LoRAs"
+  }
+}
