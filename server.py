@@ -259,7 +259,7 @@ class HomepageHandler(SimpleHTTPRequestHandler):
     def _handle_output_image(self):
         """Serve generated images from output directory."""
         filename = self.path.split("/api/output-images/", 1)[1]
-        output_dir = Path.home() / "workspace" / "output" / "images"
+        output_dir = GEN_DIR / "output" / "images"
         filepath = output_dir / filename
         if not filepath.exists() or not filepath.is_file():
             self.send_response(404)
