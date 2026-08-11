@@ -62,7 +62,7 @@ def _get_pixel_resources():
 def _get_moris_resources():
     try:
         result = subprocess.run(
-            MORIS_SSH + ["python3", "/tmp/remote_collect.py"],
+            MORIS_SSH + ["python3", "/root/scripts/remote_collect.py"],
             capture_output=True, text=True, timeout=15,
         )
         if result.returncode == 0 and result.stdout.strip():
