@@ -508,7 +508,7 @@ async function loadStatus() {
       ow.innerHTML = `
         <h3>🌐 OpenRouter</h3>
         <div class="value ${cls}">$${remaining.toFixed(2)}</div>
-        <div class="sub">剩余 · 总额 $${total.toFixed(2)} · 已用 $${usage.toFixed(2)}</div>
+        <div class="sub">已用 $${usage.toFixed(2)}</div>
         <div class="sub">本月 $${monthly.toFixed(2)}${or.is_free_tier ? ' · 免费层' : ''}</div>
       `;
     } else if (data.openrouter && data.openrouter.error) {
@@ -524,7 +524,7 @@ async function loadStatus() {
       dw.innerHTML = `
         <h3>🧠 DeepSeek</h3>
         <div class="value ${cls}">$${total.toFixed(2)}</div>
-        <div class="sub">已充值 $${parseFloat(bal.topped_up_balance).toFixed(2)} · 赠送 $${parseFloat(bal.granted_balance).toFixed(2)}</div>
+        <div class="sub">已充值 $${parseFloat(bal.topped_up_balance).toFixed(2)}</div>
       `;
     } else if (data.deepseek && data.deepseek.error) {
       dw.innerHTML = `<h3>🧠 DeepSeek</h3><div class="error">⚠ ${data.deepseek.error}</div>`;
