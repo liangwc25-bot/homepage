@@ -138,12 +138,15 @@
   .badge-tail { background: rgba(92,225,252,0.15); color: var(--accent2); }
   .badge-moris-domain { background: rgba(92,225,252,0.12); color: var(--accent2); }
 
-  /* Widgets */
+  /* Widgets — 固定两列, 避免右半浪费 */
   .widgets {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 12px;
     margin-bottom: 32px;
+  }
+  @media (max-width: 520px) {
+    .widgets { grid-template-columns: 1fr; }
   }
   .widget {
     background: var(--card);
