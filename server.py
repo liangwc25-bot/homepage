@@ -23,6 +23,24 @@ if _env_file.exists():
 DEEPSEEK_KEY = _deepseek_key or os.environ.get("DEEPSEEK_API_KEY", "")
 OPENROUTER_KEY = _openrouter_key or os.environ.get("OPENROUTER_API_KEY", "")
 RUNWARE_KEY = _runware_key or os.environ.get("RUNWARE_API_KEY", "")
+
+# Replicate balance via web cookie (replicate.com/api/users/<user>/unused-credit)
+_REPLICATE_COOKIE_FILE = Path("/root/workspace/creds/replicate_cookies.txt")
+_REPLICATE_USERNAME = "liangwc25-bot"
+def _replicate_cookie():
+    try:
+        lines = _REPLICATE_COOKIE_FILE.read_text().splitlines()
+    except Exception:
+        return ""
+    parts = []
+    for line in lines:
+        line = line.strip()
+        if not line or line.startswith("#") or len(line.split()) < 7:
+            continue
+        p = line.split()
+        parts.append(f"{p[5]}={p[6]}")
+    return "; ".join(parts)
+
 STATIC_DIR = Path(__file__).parent
 MORIS_SSH = ["ssh", "-p", "37980", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8",
              "root@100.73.239.42"]
@@ -162,6 +180,20 @@ class HomepageHandler(SimpleHTTPRequestHandler):
                 data["runware"] = {"error": str(e)}
         else:
             data["runware"] = {"error": "No RUNWARE_API_KEY"}
+        # Replicate (unused credit via web cookie)
+        rep_cookie = _replicate_cookie()
+        if rep_cookie:
+            try:
+                req = urllib.request.Request(
+                    f"https://replicate.com/api/users/{_REPLICATE_USERNAME}/unused-credit",
+                    headers={"User-Agent": "Mozilla/5.0", "Cookie": rep_cookie},
+                )
+                with urllib.request.urlopen(req, timeout=10) as r:
+                    data["replicate"] = json.loads(r.read())
+            except Exception as e:
+                data["replicate"] = {"error": str(e)}
+        else:
+            data["replicate"] = {"error": "No replicate cookie"}
         self._json_response(data)
 
     def _handle_resources(self):

@@ -316,6 +316,10 @@
       <h3>🟣 Runware</h3>
       <div class="loading">加载中...</div>
     </div>
+    <div class="widget" id="replicate-widget">
+      <h3>🔁 Replicate</h3>
+      <div class="loading">加载中...</div>
+    </div>
   </div>
 
   <!-- 🛠 工具 -->
@@ -543,6 +547,20 @@ async function loadStatus() {
       `;
     } else if (data.runware && data.runware.error) {
       rw.innerHTML = `<h3>🟣 Runware</h3><div class="error">⚠ ${data.runware.error}</div>`;
+    }
+
+    // Replicate
+    const rep = document.getElementById('replicate-widget');
+    if (data.replicate && data.replicate.unused_credit !== undefined) {
+      const bal = parseFloat(data.replicate.unused_credit);
+      const cls = bal > 5 ? 'green' : bal > 1 ? 'yellow' : bal > 0 ? 'orange' : 'red';
+      rep.innerHTML = `
+        <h3>🔁 Replicate</h3>
+        <div class="value ${cls}">$${bal.toFixed(2)}</div>
+        <div class="sub">Credit</div>
+      `;
+    } else if (data.replicate && data.replicate.error) {
+      rep.innerHTML = `<h3>🔁 Replicate</h3><div class="error">⚠ ${data.replicate.error}</div>`;
     }
 
   } catch(e) {
