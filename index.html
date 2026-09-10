@@ -145,7 +145,7 @@
     gap: 12px;
     margin-bottom: 32px;
   }
-  @media (max-width: 360px) {
+  @media (max-width: 280px) {
     .widgets { grid-template-columns: 1fr; }
   }
   .widget {
@@ -321,6 +321,10 @@
     </div>
     <div class="widget" id="replicate-widget">
       <h3>🔁 Replicate</h3>
+      <div class="loading">加载中...</div>
+    </div>
+    <div class="widget" id="r2-widget">
+      <h3>☁️ R2 存储</h3>
       <div class="loading">加载中...</div>
     </div>
   </div>
@@ -574,6 +578,29 @@ async function loadStatus() {
   }
 }
 
+// ── R2 存储用量 ──
+async function loadR2() {
+  const w = document.getElementById('r2-widget');
+  if (!w) return;
+  try {
+    const r = await fetch('/api/r2');
+    const d = await r.json();
+    if (d.error) {
+      w.innerHTML = `<h3>☁️ R2 存储</h3><div class="error">⚠ ${d.error}</div>`;
+      return;
+    }
+    const gb = (d.bytes / (1024 ** 3)).toFixed(1);
+    w.innerHTML = `
+      <h3>☁️ R2 存储</h3>
+      <div class="value" style="color:var(--accent)">${gb} GB</div>
+      <div class="sub">${d.objects} 个对象</div>
+      <div class="sub">免费额度 10GB · 超量按量计费</div>
+    `;
+  } catch(e) {
+    w.innerHTML = `<h3>☁️ R2 存储</h3><div class="error">⚠ 连接失败</div>`;
+  }
+}
+
 // ── 双机实时资源 ──
 async function loadResources() {
   try {
@@ -642,8 +669,10 @@ async function loadResources() {
 
 // ── 启动 ──
 loadStatus();
+loadR2();
 loadResources();
 setInterval(loadStatus, 60000);
+setInterval(loadR2, 60000);
 setInterval(loadResources, 15000);
 </script>
 <script>if("serviceWorker"in navigator)navigator.serviceWorker.register("/sw.js")</script>
