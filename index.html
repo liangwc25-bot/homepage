@@ -311,10 +311,13 @@
       <h3>🌐 OpenRouter</h3>
       <div class="loading">加载中...</div>
     </div>
+    <!-- DeepSeek 卡片: 先注释保留, 需用回时取消注释 (前端HTML + 下方JS渲染 + catch三处同步) -->
+    <!--
     <div class="widget" id="deepseek-widget">
       <h3>🧠 DeepSeek</h3>
       <div class="loading">加载中...</div>
     </div>
+    -->
     <div class="widget" id="runware-widget">
       <h3>🟣 Runware</h3>
       <div class="loading">加载中...</div>
@@ -526,7 +529,8 @@ async function loadStatus() {
       ow.innerHTML = `<h3>🌐 OpenRouter</h3><div class="error">⚠ ${data.openrouter.error}</div>`;
     }
 
-    // DeepSeek
+    // DeepSeek (卡片已注释保留 — 需用回时取消此注释 + HTML + catch 三处同步)
+    /*
     const dw = document.getElementById('deepseek-widget');
     if (data.deepseek && data.deepseek.balance_infos) {
       const bal = data.deepseek.balance_infos[0];
@@ -540,6 +544,7 @@ async function loadStatus() {
     } else if (data.deepseek && data.deepseek.error) {
       dw.innerHTML = `<h3>🧠 DeepSeek</h3><div class="error">⚠ ${data.deepseek.error}</div>`;
     }
+    */
 
     // Runware
     const rw = document.getElementById('runware-widget');
@@ -573,8 +578,9 @@ async function loadStatus() {
   } catch(e) {
     document.getElementById('openrouter-widget').innerHTML =
       `<h3>🌐 OpenRouter</h3><div class="error">⚠ 连接失败</div>`;
-    document.getElementById('deepseek-widget').innerHTML =
-      `<h3>🧠 DeepSeek</h3><div class="error">⚠ 连接失败</div>`;
+    // DeepSeek 卡片已注释, 需用回时取消此注释
+    // document.getElementById('deepseek-widget').innerHTML =
+    //   `<h3>🧠 DeepSeek</h3><div class="error">⚠ 连接失败</div>`;
   }
 }
 
@@ -592,7 +598,7 @@ async function loadR2() {
     const gb = (d.bytes / (1024 ** 3)).toFixed(1);
     w.innerHTML = `
       <h3>☁️ R2 存储</h3>
-      <div class="value" style="color:var(--accent)">${gb} GB</div>
+      <div class="value" style="color:var(--accent)">${gb}<span style="font-size:0.55em;font-weight:600;color:var(--text2);margin-left:6px">GB</span></div>
       <div class="sub">${d.objects} 个对象</div>
       <div class="sub">免费额度 10GB · 超量按量计费</div>
     `;
