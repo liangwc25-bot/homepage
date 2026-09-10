@@ -92,9 +92,9 @@ def _get_moris_resources():
         return {"error": str(e)}
 
 
-# ── R2 用量（rclone size，缓存避免频繁列对象）──
+# ── R2 用量（rclone size，60s 缓存防连续刷新重复列对象; 不自动更新, 打开页面才查一次）──
 _R2_CACHE = {"ts": 0.0, "data": None}
-_R2_CACHE_TTL = 600  # 秒 = 10 分钟。变化缓慢, 页面加载时查一次即可; 打开时若距上次<10min直接用缓存
+_R2_CACHE_TTL = 60  # 秒
 
 def _get_r2_usage():
     now = time.time()
