@@ -387,11 +387,11 @@
     vps67480
   </div>
   <div class="grid">
-    <a href="https://0x01.qzz.io" target="_blank" class="card pixel-card">
+    <a href="https://hermes.0x01.qzz.io" target="_blank" class="card pixel-card">
       <div class="emoji">💬</div>
       <div class="name">Hermes WebUI</div>
       <div class="desc">AI 助手对话界面</div>
-      <span class="badge badge-domain">0x01.qzz.io</span>
+      <span class="badge badge-domain">hermes.0x01.qzz.io</span>
       <span class="badge badge-tail">:8648</span>
     </a>
     <a href="https://memos.0x01.qzz.io" target="_blank" class="card pixel-card">
@@ -464,18 +464,11 @@
 // 当前从 pp.ua 访问时, 把 vps67480(0x01) 服务卡片动态替换到 pp.ua; 0x7f / Tailscale 不动
 (function(){
   if (!location.hostname.includes('0x01.pp.ua')) return;
-  // 1) Hermes WebUI 根域卡片: 0x01.qzz.io → pp.ua 的 hermes 子域
-  document.querySelectorAll('a.card[href^="https://0x01.qzz.io"]').forEach(function(a){
-    a.href = a.href.replace('https://0x01.qzz.io', 'https://hermes.0x01.pp.ua');
-  });
-  // 2) 其余 0x01.qzz.io 子域卡片 → 0x01.pp.ua
   document.querySelectorAll('a.card[href*="0x01.qzz.io"]').forEach(function(a){
     a.href = a.href.replace('0x01.qzz.io', '0x01.pp.ua');
   });
   document.querySelectorAll('.badge-domain').forEach(function(b){
-    var t = b.textContent;
-    if (t === '0x01.qzz.io') b.textContent = 'hermes.0x01.pp.ua';
-    else if (t.includes('0x01.qzz.io')) b.textContent = t.replace('0x01.qzz.io', '0x01.pp.ua');
+    if (b.textContent.includes('0x01.qzz.io')) b.textContent = b.textContent.replace('0x01.qzz.io', '0x01.pp.ua');
   });
 })();
 </script>
