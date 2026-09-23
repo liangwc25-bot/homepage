@@ -461,6 +461,19 @@
 <button id="theme-toggle" style="position:fixed;bottom:20px;right:20px;width:40px;height:40px;border-radius:50%;border:1px solid rgba(128,128,128,0.3);background:var(--card);color:var(--text);font-size:1.2rem;cursor:pointer;z-index:9999;display:flex;align-items:center;justify-content:center;transition:.2s;box-shadow:0 2px 8px rgba(0,0,0,0.15)" onclick="toggleTheme()" title="切换主题">☀️</button>
 
 <script>
+// 当前从 pp.ua 访问时, 把 vps67480(0x01) 服务卡片动态替换到 pp.ua; 0x7f / Tailscale 不动
+(function(){
+  if (!location.hostname.includes('0x01.pp.ua')) return;
+  document.querySelectorAll('a.card[href*="0x01.qzz.io"]').forEach(function(a){
+    a.href = a.href.replace('0x01.qzz.io', '0x01.pp.ua');
+  });
+  document.querySelectorAll('.badge-domain').forEach(function(b){
+    if (b.textContent.includes('0x01.qzz.io')) b.textContent = b.textContent.replace('0x01.qzz.io', '0x01.pp.ua');
+  });
+})();
+</script>
+
+<script>
 (function(){
   const saved = localStorage.getItem('theme');
   if (saved === 'light') document.documentElement.setAttribute('data-theme', 'light');
